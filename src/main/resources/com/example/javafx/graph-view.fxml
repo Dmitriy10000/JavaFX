@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.GraphController">
+   <bottom>
+      <HBox fx:id="footerHBox" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="10.0" style="-fx-background-color: rgb(119, 107, 93);" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="BOTTOM_CENTER" minHeight="0.0" minWidth="0.0" />
+            <HBox minHeight="0.0" minWidth="0.0" spacing="10.0">
+               <children>
+                  <VBox minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <Label minHeight="0.0" minWidth="0.0" text="Type" textFill="#f3eeea" />
+                        <ChoiceBox fx:id="dataTypeChoiceBox" minHeight="0.0" minWidth="100.0" prefWidth="100.0" style="-fx-background-color: rgb(235, 227, 213);" />
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="BOTTOM_CENTER" minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <ToggleButton fx:id="liveToggleButton" minHeight="0.0" minWidth="50.0" mnemonicParsing="false" prefWidth="50.0" style="-fx-background-color: rgb(235, 227, 213);" text="Live" textFill="#776b5d" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="dateHBox" alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="10.0">
+               <children>
+                  <VBox minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <Label minHeight="0.0" minWidth="0.0" text="From" textFill="#f3eeea" />
+                        <DatePicker fx:id="startDatePicker" minHeight="0.0" minWidth="100.0" prefWidth="100.0" style="-fx-background-color: rgb(235, 227, 213);" />
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <Label minHeight="0.0" minWidth="0.0" text="To" textFill="#f3eeea" />
+                        <DatePicker fx:id="endDatePicker" minHeight="0.0" minWidth="100.0" prefWidth="100.0" style="-fx-background-color: rgb(235, 227, 213);" />
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="BOTTOM_CENTER" minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <Button fx:id="showGraphBtn" minHeight="0.0" minWidth="100.0" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: rgb(235, 227, 213);" text="Show graph" textFill="#776b5d" />
+                     </children>
+                  </VBox>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <top>
+      <HBox fx:id="headerHBox" alignment="TOP_RIGHT" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(119, 107, 93);" BorderPane.alignment="CENTER">
+         <children>
+            <VBox minHeight="0.0" minWidth="0.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="goToMainBtn" mnemonicParsing="false" style="-fx-background-color: rgb(235, 227, 213); -fx-background-radius: 20;" text="Go to menu" textFill="#776b5d" />
+               </children>
+            </VBox>
+            <VBox fx:id="Language1" alignment="CENTER" layoutX="495.0" layoutY="15.0" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label fx:id="SelectComPortLabel" minHeight="0.0" minWidth="0.0" text="Select COM-port:" textFill="#f3eeea" />
+               </children>
+            </VBox>
+            <ChoiceBox fx:id="ComPortChoiceBox" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(235, 227, 213);" />
+            <VBox fx:id="Language" alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label fx:id="LanguageLabel" minHeight="0.0" minWidth="0.0" text="Language:" textFill="#f3eeea" />
+               </children>
+            </VBox>
+            <ChoiceBox fx:id="languageChoiceBox" focusTraversable="false" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(235, 227, 213);" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </top>
+   <center>
+      <VBox minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER">
+         <children>
+            <LineChart fx:id="lineChart" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(243, 238, 234);">
+               <xAxis>
+                  <CategoryAxis fx:id="categoryAxis" minHeight="0.0" minWidth="0.0" side="BOTTOM" tickLabelFill="#776b5d" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis fx:id="numberAxis" minHeight="0.0" minWidth="0.0" side="LEFT" tickLabelFill="#776b5d" />
+               </yAxis>
+            </LineChart>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
