@@ -493,35 +493,48 @@ public class DBController {
     }
 
     // Вывод данных в CSV-файл
-    public static void exportDataToCSV(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to) {
+    public static List<DataController> getDataToCSV(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to) {
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
             String selectData = """
-                SELECT date, co2, tvoc, heart_rate, temperature, pressure, humidity
+                SELECT date
+            """;
+            if (co2) selectData += ", co2";
+            if (tvoc) selectData += ", tvoc";
+            if (heart_rate) selectData += ", heart_rate";
+            if (spO2) selectData += ", spo2";
+            if (temperature) selectData += ", temperature";
+            if (pressure) selectData += ", pressure";
+            if (humidity) selectData += ", humidity";
+            selectData += """
                 FROM sensors_data
-                WHERE user_id = ?
+                WHERE user_id = ? AND date BETWEEN ? AND ?
+                LIMIT ? OFFSET ?
             """;
             PreparedStatement preparedStatement = connection.prepareStatement(selectData);
             preparedStatement.setInt(1, userId);
+            preparedStatement.setTimestamp(2, start_date);
+            preparedStatement.setTimestamp(3, end_date);
+            preparedStatement.setInt(4, to-from);
+            preparedStatement.setInt(5, from);
             ResultSet resultSet = preparedStatement.executeQuery();
-            File csvFile = new File("data.csv");
-            FileWriter fileWriter = new FileWriter(csvFile);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
+            List<DataController> data = new ArrayList<>();
             while (resultSet.next()) {
-                writer.write(resultSet.getTimestamp("date") + ",");
-                writer.write(resultSet.getInt("co2") + ",");
-                writer.write(resultSet.getInt("tvoc") + ",");
-                writer.write(resultSet.getInt("heart_rate") + ",");
-                writer.write(resultSet.getInt("temperature") + ",");
-                writer.write(resultSet.getInt("pressure") + ",");
-                writer.write(resultSet.getInt("humidity") + "\n");
+                DataController dc = new DataController();
+                dc.date = resultSet.getTimestamp("date");
+                if (co2) dc.eCO2 = resultSet.getInt("co2");
+                if (tvoc) dc.TVOC = resultSet.getInt("tvoc");
+                if (heart_rate) dc.HeartRate = resultSet.getInt("heart_rate");
+                if (spO2) dc.SpO2 = resultSet.getInt("spo2");
+                if (temperature) dc.Temperature = resultSet.getInt("temperature");
+                if (pressure) dc.Pressure = resultSet.getInt("pressure");
+                if (humidity) dc.Humidity = resultSet.getInt("humidity");
+                data.add(dc);
             }
-            writer.close();
-            System.out.println("Данные успешно экспортированы в CSV-файл.");
+            return data;
         } catch (SQLException e) {
             System.err.println("Ошибка экспорта данных в CSV-файл: " + e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+        return null;
     }
 
     // Возвращаем список пользователей по куску логина либо ничего не делаем при выборе пользователя из списка

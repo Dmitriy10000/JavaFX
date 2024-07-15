@@ -5,8 +5,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,9 +69,6 @@ public class ExportController {
     private CheckBox temperatureCheckBox;
 
     @FXML
-    private BorderPane borderPane;
-
-    @FXML
     private void initialize() throws SQLException {
         updateLanguage();
         // Подгрузка языков En, Ru, Kz
@@ -118,12 +118,16 @@ public class ExportController {
 
             // Запрос на экспорт данных
             System.out.println("Найдено " + DBController.getDataCount(userId, startDate, endDate) + " записей для экспорта");
-            borderPane.setDisable(true);
-            for (int i = 0; i < 100; i++) {
-                progressBar.setProgress(i / 100.0);
+            progressBar.setVisible(true);
+            ProgressBarLabel.setVisible(true);
+            int count = DBController.getDataCount(userId, startDate, endDate);
+            for (int i = 0; i < count; i += 1000) {
+                progressBar.setProgress((double) i / count);
+                exportDataToCSV(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
             }
-            DBController.exportDataToCSV(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, pressure, humidity, temperature, 10000, 1);
-            borderPane.setDisable(false);
+            progressBar.setProgress(1);
+            progressBar.setVisible(false);
+            ProgressBarLabel.setVisible(false);
         });
 
         // При вводе в поле поиска пользователей обновляется список пользователей
@@ -138,6 +142,21 @@ public class ExportController {
             // При выборе из выпадающего списка обновляется поле ввода
             selectUserComboBox.getEditor().setText(selectUserComboBox.getValue());
         });
+    }
+
+    // Вывод данных в CSV-файл (дописывание в конец файла)
+    public static void exportDataToCSV(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to) {
+        try {
+            File file = new File("export.csv");
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            List<DataController> data = DBController.getDataToCSV(userId, start_date, end_date, co2, tvoc, heart_rate, spO2, temperature, pressure, humidity, from, to);
+            for (DataController d : data) {
+                bw.write(d.getData("pressure") + "," + d.getData("humidity") + "," + d.getData("temperature") + "," + d.getData("spo2") + "," + d.getData("heart rate") + "," + d.getData("co2") + "," + d.getData("tvoc") + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateLanguage() {
