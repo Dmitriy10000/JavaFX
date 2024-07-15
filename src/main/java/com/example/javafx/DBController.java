@@ -495,9 +495,7 @@ public class DBController {
     // Вывод данных в CSV-файл
     public static List<DataController> getDataToCSV(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to) {
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
-            String selectData = """
-                SELECT date
-            """;
+            String selectData = "SELECT date";
             if (co2) selectData += ", co2";
             if (tvoc) selectData += ", tvoc";
             if (heart_rate) selectData += ", heart_rate";

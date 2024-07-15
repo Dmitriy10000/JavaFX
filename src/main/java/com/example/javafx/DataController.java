@@ -89,13 +89,14 @@ public class DataController {
     // Получение данных по типу
     public static int getData(String dataType) {
         return switch (dataType) {
-            case "pressure" -> DataController.Pressure;
-            case "humidity" -> DataController.Humidity;
-            case "temperature" -> DataController.Temperature;
-            case "spo2" -> DataController.SpO2;
-            case "heart rate" -> DataController.HeartRate;
+            case "date" -> (int) date.getTime();
             case "co2" -> DataController.eCO2;
             case "tvoc" -> DataController.TVOC;
+            case "heart rate" -> DataController.HeartRate;
+            case "spo2" -> DataController.SpO2;
+            case "temperature" -> DataController.Temperature;
+            case "pressure" -> DataController.Pressure;
+            case "humidity" -> DataController.Humidity;
             default -> 0;
         };
     }

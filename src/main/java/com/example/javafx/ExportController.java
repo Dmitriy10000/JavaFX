@@ -128,6 +128,7 @@ public class ExportController {
             progressBar.setProgress(1);
             progressBar.setVisible(false);
             ProgressBarLabel.setVisible(false);
+            System.out.println("Экспорт завершен");
         });
 
         // При вводе в поле поиска пользователей обновляется список пользователей
@@ -152,8 +153,19 @@ public class ExportController {
             BufferedWriter bw = new BufferedWriter(fw);
             List<DataController> data = DBController.getDataToCSV(userId, start_date, end_date, co2, tvoc, heart_rate, spO2, temperature, pressure, humidity, from, to);
             for (DataController d : data) {
-                bw.write(d.getData("pressure") + "," + d.getData("humidity") + "," + d.getData("temperature") + "," + d.getData("spo2") + "," + d.getData("heart rate") + "," + d.getData("co2") + "," + d.getData("tvoc") + "\n");
+                // Выводим date в читаемом формате
+                bw.write(d.date.toString().substring(0, 19));
+                if (co2) bw.write("," + d.getData("co2"));
+                if (tvoc) bw.write("," + d.getData("tvoc"));
+                if (heart_rate) bw.write("," + d.getData("heart rate"));
+                if (spO2) bw.write("," + d.getData("spo2"));
+                if (temperature) bw.write("," + d.getData("temperature"));
+                if (pressure) bw.write("," + d.getData("pressure"));
+                if (humidity) bw.write("," + d.getData("humidity"));
+                bw.newLine();
             }
+            bw.close();
+            fw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
