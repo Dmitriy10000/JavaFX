@@ -36,37 +36,37 @@ public class DataController {
         if (line.startsWith("eCO2: ") && line.contains(" ppm")) {
             String eCO2String = line.substring("eCO2: ".length(), line.indexOf(" ppm"));
             eCO2 = (int) (Float.parseFloat(eCO2String) * 100);
-            eCO2 = eCO2 * DBController.SensorsConfig.co2_coefficient;
+            eCO2 = eCO2 * DBController.SensorsConfig.co2_coefficient / 1000;
         }
         if (line.startsWith("TVOC: ") && line.contains(" ppb")) {
             String TVOCString = line.substring("TVOC: ".length(), line.indexOf(" ppb"));
             TVOC = (int) (Float.parseFloat(TVOCString) * 100);
-            TVOC = TVOC * DBController.SensorsConfig.tvoc_coefficient;
+            TVOC = TVOC * DBController.SensorsConfig.tvoc_coefficient / 1000;
         }
         if (line.startsWith("Heart Rate: ")) {
             String HeartRateString = line.substring("Heart Rate: ".length());
             HeartRate = (int) (Float.parseFloat(HeartRateString) * 100);
-            HeartRate = HeartRate * DBController.SensorsConfig.heart_rate_coefficient;
+            HeartRate = HeartRate * DBController.SensorsConfig.heart_rate_coefficient / 1000;
         }
         if (line.startsWith("SpO2: ") && line.contains(" %")){
             String Spo2String = line.substring("SpO2: ".length(), line.indexOf(" %"));
             SpO2 = (int) (Float.parseFloat(Spo2String) * 100);
-            SpO2 = SpO2 * DBController.SensorsConfig.spo2_coefficient;
+            SpO2 = SpO2 * DBController.SensorsConfig.spo2_coefficient / 1000;
         }
         if (line.startsWith("Pressure: ") && line.contains(" Pa")) {
             String PressureString = line.substring("Pressure: ".length(), line.indexOf(" Pa"));
             Pressure = (int) (Float.parseFloat(PressureString) * 100);
-            Pressure = Pressure * DBController.SensorsConfig.pressure_coefficient;
+            Pressure = Pressure * DBController.SensorsConfig.pressure_coefficient / 1000;
         }
         if (line.startsWith("Humidity: ") && line.contains(" %")) {
             String HumidityString = line.substring("Humidity: ".length(), line.indexOf(" %"));
             Humidity = (int) (Float.parseFloat(HumidityString) * 100);
-            Humidity = Humidity * DBController.SensorsConfig.humidity_coefficient;
+            Humidity = Humidity * DBController.SensorsConfig.humidity_coefficient / 1000;
         }
         if (line.startsWith("Temperature: ") && line.contains(" *C")) {
             String TemperatureString = line.substring("Temperature: ".length(), line.indexOf(" *C"));
             Temperature = (int) (Float.parseFloat(TemperatureString) * 100);
-            Temperature = Temperature * DBController.SensorsConfig.temperature_coefficient;
+            Temperature = Temperature * DBController.SensorsConfig.temperature_coefficient / 1000;
         }
     }
 

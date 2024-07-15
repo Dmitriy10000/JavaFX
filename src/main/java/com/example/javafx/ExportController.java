@@ -120,14 +120,16 @@ public class ExportController {
             System.out.println("Найдено " + DBController.getDataCount(userId, startDate, endDate) + " записей для экспорта");
             progressBar.setVisible(true);
             ProgressBarLabel.setVisible(true);
+            progressBar.setProgress(0);
             int count = DBController.getDataCount(userId, startDate, endDate);
             for (int i = 0; i < count; i += 1000) {
+                System.out.println("Экспорт с " + i + " по " + Math.min(i + 1000, count) + " запись");
                 progressBar.setProgress((double) i / count);
                 exportDataToCSV(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
             }
             progressBar.setProgress(1);
-            progressBar.setVisible(false);
-            ProgressBarLabel.setVisible(false);
+//            progressBar.setVisible(false);
+//            ProgressBarLabel.setVisible(false);
             System.out.println("Экспорт завершен");
         });
 
