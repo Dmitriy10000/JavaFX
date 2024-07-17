@@ -88,7 +88,14 @@ public class ComPortController {
             }
         }
     }
-
+    // Функция посылает сигнал на ардуино включить пищалку
+    public static void sendWarningCommand(){
+        String command = "WARNING";
+        //System.out.println("Sent command: Warning ");
+        //System.out.println(command);
+        output.println(command);
+        output.flush();
+    }
     public void closePort() {
         if (comPort != null && comPort.isOpen()) {
             comPort.closePort();

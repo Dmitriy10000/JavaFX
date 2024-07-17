@@ -326,5 +326,6 @@ public class MainController {
         ServoMaxText.setText(LanguageController.getString("servoMax"));
         ServoMinRightText.setText(LanguageController.getString("servoMin"));
         ServoMaxRightText.setText(LanguageController.getString("servoMax"));
+        GoToExportBtn.setText(LanguageController.getString("exportData"));
     }
 }

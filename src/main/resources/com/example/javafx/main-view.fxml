@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.MainController">
    <left>
       <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(235, 227, 213);" BorderPane.alignment="CENTER">
          <children>
@@ -206,7 +198,7 @@
                   <Button fx:id="LogoutBtn" mnemonicParsing="false" style="-fx-background-color: rgb(235, 227, 213); -fx-background-radius: 20;" text="Logout" textFill="#776b5d" />
                </children>
             </VBox>
-            <Button fx:id="GoToExportBtn" mnemonicParsing="false" text="Button" />
+            <Button fx:id="GoToExportBtn" mnemonicParsing="false" style="-fx-background-color: rgb(235, 227, 213); -fx-background-radius: 20;" text="Export data" textFill="#776b5d" />
             <VBox fx:id="Language1" alignment="CENTER" layoutX="495.0" layoutY="15.0" minHeight="0.0" minWidth="0.0">
                <children>
                   <Label fx:id="SelectComPortLabel" minHeight="0.0" minWidth="0.0" text="Select COM-port:" textFill="#f3eeea" />
