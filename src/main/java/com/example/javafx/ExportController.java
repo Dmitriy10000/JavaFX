@@ -1,4 +1,5 @@
 package com.example.javafx;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -118,18 +119,24 @@ public class ExportController {
 
             // Запрос на экспорт данных
             System.out.println("Найдено " + DBController.getDataCount(userId, startDate, endDate) + " записей для экспорта");
-            progressBar.setVisible(true);
-            ProgressBarLabel.setVisible(true);
-            progressBar.setProgress(0);
             int count = DBController.getDataCount(userId, startDate, endDate);
-            for (int i = 0; i < count; i += 1000) {
-                System.out.println("Экспорт с " + i + " по " + Math.min(i + 1000, count) + " запись");
-                progressBar.setProgress((double) i / count);
-                exportDataToCSV(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
-            }
-            progressBar.setProgress(1);
-//            progressBar.setVisible(false);
-//            ProgressBarLabel.setVisible(false);
+            // Выполняем экспорт в отдельном потоке, а потом обновляем прогрессбар
+            // exportDataToCSV(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
+            final int finalUserId = userId;
+            new Thread(() -> {
+                Platform.runLater(() -> progressBar.setProgress(0));
+                Platform.runLater(() -> progressBar.setVisible(true));
+                Platform.runLater(() -> ProgressBarLabel.setVisible(true));
+                for (int i = 0; i < count; i += 1000) {
+                    System.out.println("Экспорт с " + i + " по " + Math.min(i + 1000, count) + " запись");
+                    exportDataToCSV(finalUserId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
+                    final int finalI = i;
+                    Platform.runLater(() -> progressBar.setProgress((double) finalI / count));
+                }
+                Platform.runLater(() -> progressBar.setProgress(1));
+                Platform.runLater(() -> progressBar.setVisible(false));
+                Platform.runLater(() -> ProgressBarLabel.setVisible(false));
+            }).start();
             System.out.println("Экспорт завершен");
         });
 
