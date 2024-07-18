@@ -7,7 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -101,7 +103,7 @@ public class MainController {
 
 
     @FXML
-    private void initialize(){
+    private void initialize() throws SQLException {
         updateLanguage();
         ComPortChoiceBox.getItems().addAll(listAvailableComPorts());
         languageChoiceBox.getItems().addAll("English", "Русский", "Қазақша");
@@ -111,7 +113,22 @@ public class MainController {
         if (LanguageController.getLanguage().equals("kz")) languageChoiceBox.setValue("Қазақша");
 
         int userId = DBController.getCurrentUserId();
-        DBController.loadSensorsConfig(userId);
+        if (Objects.equals(DBController.getUserType(), "user")) {
+            DBController.loadSensorsConfig(userId);
+            GoToExportBtn.setVisible(true);
+            detailedGraphButton.setVisible(true);
+            goToProfileBtn.setVisible(true);
+        }
+        else if (Objects.equals(DBController.getUserType(), "doctor")) {
+            DBController.loadSensorsConfig(DBController.getUserId(DBController.searchUser("").getFirst()));
+            GoToExportBtn.setVisible(true);
+            detailedGraphButton.setVisible(true);
+            goToDoctorMenuBtn.setVisible(true);
+        }
+        else if (Objects.equals(DBController.getUserType(), "engineer")) {
+            DBController.loadSensorsConfig(DBController.getUserId(DBController.searchUser("").getFirst()));
+            goToEngineerMenuBtn.setVisible(true);
+        }
         servo1Slider.setMin(DBController.SensorsConfig.valve1_min);
         servo1Slider.setMax(DBController.SensorsConfig.valve1_max);
         servo1Slider.setValue((DBController.SensorsConfig.valve1_min + DBController.SensorsConfig.valve1_max) / 2);

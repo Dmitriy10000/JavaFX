@@ -608,7 +608,7 @@ public class DBController {
     public static List<String> searchUser(String username) throws SQLException {
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
             String selectUser = """
-                SELECT username FROM users WHERE username LIKE ?
+                SELECT username FROM users WHERE username LIKE ? AND user_type = 'user'
             """;
             PreparedStatement preparedStatement = connection.prepareStatement(selectUser);
             preparedStatement.setString(1, "%" + username + "%");

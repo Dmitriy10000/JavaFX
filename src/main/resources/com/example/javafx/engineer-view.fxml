@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.EngineerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.EngineerController">
    <center>
       <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="10.0" style="-fx-background-color: rgb(235, 227, 213);" BorderPane.alignment="CENTER">
          <children>
@@ -18,7 +24,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" minHeight="0.0" minWidth="0.0">
+            <HBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="10.0">
                <children>
                   <VBox minHeight="0.0" minWidth="0.0">
                      <children>
@@ -94,8 +100,6 @@
                               <Insets />
                            </VBox.margin>
                         </Spinner>
-                        <Label fx:id="SelectUserLabel" text="Select user:" textFill="#776b5d" />
-                        <ComboBox fx:id="selectUserComboBox" editable="true" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox minHeight="0.0" minWidth="0.0">
@@ -161,6 +165,12 @@
                   <Button fx:id="goToMainBtn" mnemonicParsing="false" style="-fx-background-color: rgb(235, 227, 213); -fx-background-radius: 20;" text="Go to menu" textFill="#776b5d" />
                </children>
             </VBox>
+            <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label fx:id="SelectUserLabel" text="Select user:" textFill="#f3eeea" />
+               </children>
+            </VBox>
+            <ComboBox fx:id="selectUserComboBox" editable="true" minHeight="0.0" minWidth="0.0" prefWidth="150.0" />
             <VBox fx:id="Language" alignment="CENTER" minHeight="0.0" minWidth="0.0">
                <children>
                   <Label fx:id="LanguageLabel" minHeight="0.0" minWidth="0.0" text="Language:" textFill="#f3eeea" />
