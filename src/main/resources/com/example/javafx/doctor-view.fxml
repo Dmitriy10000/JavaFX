@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.DoctorController">
+   <top>
+      <HBox alignment="TOP_RIGHT" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(119, 107, 93);" BorderPane.alignment="CENTER">
+         <children>
+            <VBox minHeight="0.0" minWidth="0.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="goToMainBtn" mnemonicParsing="false" style="-fx-background-color: rgb(235, 227, 213); -fx-background-radius: 20;" text="Go to menu" textFill="#776b5d" />
+               </children>
+            </VBox>
+            <VBox fx:id="Language" alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label fx:id="LanguageLabel" minHeight="0.0" minWidth="0.0" text="Language:" textFill="#f3eeea" />
+               </children>
+            </VBox>
+            <ChoiceBox fx:id="languageChoiceBox" focusTraversable="false" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(235, 227, 213);" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </top>
+   <center>
+      <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label fx:id="doctorTitle" text="Create a group">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="10.0">
+               <children>
+                  <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <Label fx:id="englishLabel" minHeight="0.0" minWidth="0.0" text="Title English" />
+                        <TextField fx:id="english" minHeight="0.0" minWidth="0.0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <Label fx:id="russianLabel" minHeight="0.0" minWidth="0.0" text="Title Russian" />
+                        <TextField fx:id="russian" minHeight="0.0" minWidth="0.0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="159.0" layoutY="10.0" minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <Label fx:id="kazakhLabel" minHeight="0.0" minWidth="0.0" text="Title Kazakh" />
+                        <TextField fx:id="kazakh" minHeight="0.0" minWidth="0.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Button fx:id="saveButton" mnemonicParsing="false" text="create" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

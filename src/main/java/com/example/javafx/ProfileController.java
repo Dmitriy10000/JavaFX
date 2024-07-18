@@ -78,11 +78,23 @@ public class ProfileController {
             String firstName = FirstName.getText();
             String lastName = LastName.getText();
             String phoneNumber = PhoneNumber.getText();
-            Timestamp dateOfBirth = Timestamp.valueOf(DateOfBirth.getValue().atStartOfDay());
+            LocalDate dateOfBirth = DateOfBirth.getValue();
             String weight = Weight.getText();
             String groupChoice = GroupChoiceBox.getValue();
             String sexChoice = SexChoiceBox.getValue();
+
+            // Call the function to save user profile information
+            boolean success = DBController.saveUserProfile(firstName, lastName, phoneNumber, dateOfBirth, weight, groupChoice, sexChoice);
+
+            if (success) {
+                // Show success message or handle success case
+                System.out.println("User profile saved successfully.");
+            } else {
+                // Show error message or handle error case
+                System.err.println("Failed to save user profile.");
+            }
         });
+
 
         goToMainBtn.setOnAction(actionEvent -> {
             try {
