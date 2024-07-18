@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.application.Platform;
 import javafx.scene.layout.HBox;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -78,6 +79,19 @@ public class GraphController {
                 e.printStackTrace();
             }
         }
+
+        // При вводе в поле поиска пользователей обновляется список пользователей
+        selectUserComboBox.setOnAction(actionEvent -> {
+            try {
+                List<String> users = DBController.searchUser(selectUserComboBox.getEditor().getText());
+                selectUserComboBox.getItems().clear();
+                selectUserComboBox.getItems().addAll(users);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // При выборе из выпадающего списка обновляется поле ввода
+            selectUserComboBox.getEditor().setText(selectUserComboBox.getValue());
+        });
 
         ComPortController comPortController = new ComPortController();
         comPortController.initializeSerialPort();
