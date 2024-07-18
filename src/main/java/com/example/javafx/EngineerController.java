@@ -116,8 +116,13 @@ public class EngineerController
         if (LanguageController.getLanguage().equals("ru")) languageChoiceBox.setValue("Русский");
         if (LanguageController.getLanguage().equals("kz")) languageChoiceBox.setValue("Қазақша");
 
-        List<String> users = DBController.searchUser("");
-        selectUserComboBox.getItems().addAll(users);
+        try {
+            List<String> users = DBController.searchUser("");
+            selectUserComboBox.getItems().addAll(users);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         SaveButton.setOnAction(actionEvent -> {
             int HRTreshold = HeartRateThresholdSpinner.getValue();
@@ -133,6 +138,19 @@ public class EngineerController
             int LSMax = LeftServoMaxSpinner.getValue();
             int RSMin = RightServoMinSpinner.getValue();
             int RSMax = RightServoMaxSpinner.getValue();
+        });
+
+        // При вводе в поле поиска пользователей обновляется список пользователей
+        selectUserComboBox.setOnAction(actionEvent -> {
+            try {
+                List<String> users = DBController.searchUser(selectUserComboBox.getEditor().getText());
+                selectUserComboBox.getItems().clear();
+                selectUserComboBox.getItems().addAll(users);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // При выборе из выпадающего списка обновляется поле ввода
+            selectUserComboBox.getEditor().setText(selectUserComboBox.getValue());
         });
 
         goToMainBtn.setOnAction(actionEvent -> {
