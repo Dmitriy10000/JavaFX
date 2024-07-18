@@ -86,7 +86,7 @@ public class GraphController {
         dataTypeChoiceBox.setValue("CO2");
 
         showGraphBtn.setOnAction(e -> {
-            String dataType = dataTypeChoiceBox.getValue().toLowerCase();
+            String dataType = dataTypeChoiceBox.getValue().toLowerCase().equals("heart rate") ? "heart_rate" : dataTypeChoiceBox.getValue().toLowerCase();
             Timestamp startDate = Timestamp.valueOf(startDatePicker.getValue().atStartOfDay());
             Timestamp endDate = Timestamp.valueOf(endDatePicker.getValue().atStartOfDay());
             int userId = DBController.getUserId(selectUserComboBox.getValue());

@@ -102,18 +102,17 @@
          </padding>
       </HBox>
    </top>
+   <left>
+      <VBox minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER" />
+   </left>
    <center>
-      <VBox minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER">
-         <children>
-            <LineChart fx:id="lineChart" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(243, 238, 234);">
-               <xAxis>
-                  <CategoryAxis fx:id="categoryAxis" minHeight="0.0" minWidth="0.0" side="BOTTOM" tickLabelFill="#776b5d" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis fx:id="numberAxis" minHeight="0.0" minWidth="0.0" side="LEFT" tickLabelFill="#776b5d" />
-               </yAxis>
-            </LineChart>
-         </children>
-      </VBox>
+      <LineChart fx:id="lineChart" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER">
+         <xAxis>
+            <CategoryAxis fx:id="categoryAxis" minHeight="0.0" minWidth="0.0" side="BOTTOM" tickLabelFill="#776b5d" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="numberAxis" minHeight="0.0" minWidth="0.0" side="LEFT" tickLabelFill="#776b5d" />
+         </yAxis>
+      </LineChart>
    </center>
 </BorderPane>
