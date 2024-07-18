@@ -59,4 +59,31 @@ public class SceneController {
         stage.setTitle("Export");
         stage.show();
     }
+
+    public static void goToProfile(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("profile-view.fxml")));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Profile");
+        stage.show();
+    }
+
+    public static void goToEngineerMenu(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("engineer-view.fxml")));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Engineer Menu");
+        stage.show();
+    }
+
+    public static void goToDoctorMenu(ActionEvent actionEvent) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("doctor-view.fxml")));
+        stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Doctor Menu");
+        stage.show();
+    }
 }

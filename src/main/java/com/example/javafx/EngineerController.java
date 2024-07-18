@@ -107,7 +107,9 @@ public class EngineerController
     @FXML
     private Button SaveButton;
 
+    @FXML
     private void initialize() throws SQLException {
+        updateLanguage();
         languageChoiceBox.getItems().addAll("English", "Русский", "Қазақша");
         System.out.println(LanguageController.getLanguage());
         if (LanguageController.getLanguage().equals("en")) languageChoiceBox.setValue("English");

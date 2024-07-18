@@ -65,7 +65,9 @@ public class ProfileController {
     @FXML
     private Button SaveButton;
 
-    private void initialize(){
+    @FXML
+    private void initialize() {
+        updateLanguage();
         languageChoiceBox.getItems().addAll("English", "Русский", "Қазақша");
         System.out.println(LanguageController.getLanguage());
         if (LanguageController.getLanguage().equals("en")) languageChoiceBox.setValue("English");
@@ -110,7 +112,7 @@ public class ProfileController {
         PhoneNumber.setPromptText(LanguageController.getString("phoneNumber"));
         DateOfBirth.setPromptText(LanguageController.getString("dateOfBirth"));
         Weight.setPromptText(LanguageController.getString("weight"));
-        GroupLabel.setText(LanguageController.getString("groups"));
+        GroupLabel.setText(LanguageController.getString("group"));
         SexLabel.setText(LanguageController.getString("sex"));
         FirstNameLabel.setText(LanguageController.getString("firstNameLabel"));
         LastNameLabel.setText(LanguageController.getString("lastNameLabel"));
