@@ -33,6 +33,9 @@ public class GraphController {
     private ChoiceBox<String> languageChoiceBox;
 
     @FXML
+    private Label LanguageLabel;
+
+    @FXML
     private ComboBox<String> selectUserComboBox;
 
     @FXML
@@ -58,7 +61,20 @@ public class GraphController {
 
     private XYChart.Series<String, Number> series; // Серия для данных в реальном времени
 
+    @FXML
+    private Label TypeLabel;
 
+    @FXML
+    private Label FromLabel;
+
+    @FXML
+    private Label ToLabel;
+
+    private String co2;
+    private String tvoc;
+    private String spo2;
+    private String heartRate;
+    private String pressure;
     @FXML
     private void initialize() {
         updateLanguage();
@@ -265,5 +281,12 @@ public class GraphController {
     }
 
     private void updateLanguage() {
+        LanguageLabel.setText(LanguageController.getString("languageText"));
+        SelectUserLabel.setText(LanguageController.getString("selectUserLabel"));
+        goToMainBtn.setText(LanguageController.getString("toMainBtn"));
+        TypeLabel.setText(LanguageController.getString("typeLabel"));
+        FromLabel.setText(LanguageController.getString("fromRange"));
+        ToLabel.setText(LanguageController.getString("toRange"));
+        showGraphBtn.setText(LanguageController.getString("showGraphBtn"));
     }
 }
