@@ -430,24 +430,31 @@ public class DBController {
     }
 
     // Получение данных за определенный период
-    public static dataArray getData(String type, Timestamp start_date, Timestamp end_date) {
-        if (type.equals("co2") || type.equals("tvoc") || type.equals("heart_rate") || type.equals("spo2") || type.equals("temperature") || type.equals("pressure") || type.equals("humidity")) {
+    public static dataArray getData(int userId, String type, Timestamp start_date, Timestamp end_date, int from, int to, int skip) {
+        if (type.equals("co2") || type.equals("tvoc") || type.equals("heart_rate") || type.equals("spo2") || type.equals("spo2") || type.equals("temperature") || type.equals("pressure") || type.equals("humidity")) {
             dataArray data = new dataArray();
             try (Connection connection = DriverManager.getConnection(DB_PATH)) {
                 String selectData = """
                     SELECT date, %s FROM sensors_data
                     WHERE user_id = ? AND date BETWEEN ? AND ? AND %s IS NOT NULL
+                    ORDER BY date ASC
+                    LIMIT ? OFFSET ?
                 """.formatted(type, type);
                 PreparedStatement preparedStatement = connection.prepareStatement(selectData);
                 preparedStatement.setInt(1, userId);
                 preparedStatement.setTimestamp(2, start_date);
                 preparedStatement.setTimestamp(3, end_date);
+                preparedStatement.setInt(4, to-from);
+                preparedStatement.setInt(5, from);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 int i = 0;
                 while (resultSet.next()) {
                     data.date[i] = resultSet.getTimestamp("date");
                     data.data[i] = resultSet.getInt(type) / 100.0f;
                     i++;
+                    for (int j = 0; j < skip; j++) {
+                        resultSet.next();
+                    }
                 }
                 data.dataCount = i;
             } catch (SQLException e) {

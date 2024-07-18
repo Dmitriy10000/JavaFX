@@ -32,6 +32,12 @@ public class GraphController {
     private ChoiceBox<String> languageChoiceBox;
 
     @FXML
+    private ComboBox<String> selectUserComboBox;
+
+    @FXML
+    private Label SelectUserLabel;
+
+    @FXML
     private DatePicker startDatePicker;
 
     @FXML
@@ -63,33 +69,76 @@ public class GraphController {
         if (LanguageController.getLanguage().equals("kz")) languageChoiceBox.setValue("Қазақша");
 
         if (Objects.equals(DBController.getUserType(), "doctor")) {
-//            SelectUserLabel.setVisible(true);
-//            selectUserComboBox.setVisible(true);
-//            List<String> users = DBController.searchUser("");
-//            selectUserComboBox.getItems().addAll(users);
+            SelectUserLabel.setVisible(true);
+            selectUserComboBox.setVisible(true);
+            try {
+                List<String> users = DBController.searchUser("");
+                selectUserComboBox.getItems().addAll(users);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         ComPortController comPortController = new ComPortController();
         comPortController.initializeSerialPort();
 
-        dataTypeChoiceBox.getItems().addAll("CO2", "tVOC", "Heart Rate", "Pressure", "Humidity", "Temperature");
+        dataTypeChoiceBox.getItems().addAll("CO2", "tVOC", "SpO2", "Heart Rate", "Pressure", "Humidity", "Temperature");
         dataTypeChoiceBox.setValue("CO2");
 
         showGraphBtn.setOnAction(e -> {
             String dataType = dataTypeChoiceBox.getValue().toLowerCase();
             Timestamp startDate = Timestamp.valueOf(startDatePicker.getValue().atStartOfDay());
             Timestamp endDate = Timestamp.valueOf(endDatePicker.getValue().atStartOfDay());
-            DBController.dataArray data = DBController.getData(dataType, startDate, endDate);
-
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            // Делаем подпись нашего графика
-            series.setName(dataType);
-
-            for (int i = 0; i < data.dataCount; i++) {
-                series.getData().add(new XYChart.Data<>(data.date[i].toString(), data.data[i]));
+            int userId = DBController.getUserId(selectUserComboBox.getValue());
+            if (Objects.equals(DBController.getUserType(), "user")) {
+                userId = DBController.getCurrentUserId();
             }
-            lineChart.getData().clear();
-            lineChart.getData().add(series);
+            if (userId == 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("User not found");
+                alert.setContentText("Please select a user from the list");
+                alert.showAndWait();
+                return;
+            }
+
+            final int fullCount = DBController.getDataCount(userId, startDate, endDate);
+            final int userIdFinal = userId;
+            final int maxDotCount = 1000;
+            final int skipCoefficient = fullCount / maxDotCount;
+            final int uploadStep = 10000;
+            System.out.println("fullCount: " + fullCount);
+            System.out.println("skipCoefficient: " + skipCoefficient);
+            new Thread(() -> {
+                try {
+                    Platform.runLater(() -> lineChart.getData().clear());
+                    for (int i = 0; i < fullCount; i += uploadStep*skipCoefficient) {
+                        DBController.dataArray data = DBController.getData(userIdFinal, dataType, startDate, endDate, i, i+uploadStep*skipCoefficient, skipCoefficient);
+                        XYChart.Series<String, Number> series = new XYChart.Series<>();
+                        // Делаем подпись нашего графика
+                        series.setName(dataType);
+                        for (int j = 0; j < data.dataCount; j++) {
+                            int finalJ = j;
+                            series.getData().add(new XYChart.Data<>(data.date[finalJ].toString(), data.data[finalJ]));
+                        }
+                        Platform.runLater(() -> lineChart.getData().add(series));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }).start();
+
+//            DBController.dataArray data = DBController.getData(userId, dataType, startDate, endDate, 0, 0, 0);
+//
+//            XYChart.Series<String, Number> series = new XYChart.Series<>();
+//            // Делаем подпись нашего графика
+//            series.setName(dataType);
+//
+//            for (int i = 0; i < data.dataCount; i++) {
+//                series.getData().add(new XYChart.Data<>(data.date[i].toString(), data.data[i]));
+//            }
+//            lineChart.getData().clear();
+//            lineChart.getData().add(series);
         });
 
         // Отобразить график в реальном времени за последние 60 секунд
