@@ -12,29 +12,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainController {
-    @FXML
-    private Label eCO2Label;
+//    @FXML
+//    private Label eCO2Label;
+//
+//    @FXML
+//    private Label tVOCLabel;
 
-    @FXML
-    private Label tVOCLabel;
-
-    @FXML
-    private Label HumidityLabel;
-
-    @FXML
-    private Label TemperatureLabel;
+    private String Humidity;
+    private String Temperature;
+    private String HeartRate;
+    private String Spo2;
+    private String Pressure;
 
     @FXML
     private Label HeartRateLabel;
-
-    @FXML
-    private Label Spo2Label;
-
-    @FXML
-    private Label PressureLabel;
-
-    @FXML
-    private Label HeartRateLabel2;
 
     @FXML
     private Label eCO2LabelData;
@@ -80,6 +71,15 @@ public class MainController {
 
     @FXML
     private Button GoToExportBtn;
+
+    @FXML
+    private Button goToProfileBtn;
+
+    @FXML
+    private Button goToDoctorMenuBtn;
+
+    @FXML
+    private Button goToEngineerMenuBtn;
 
     @FXML
     private ChoiceBox<String> languageChoiceBox;
@@ -186,6 +186,33 @@ public class MainController {
                 e.printStackTrace();
             }
         });
+
+        goToProfileBtn.setOnAction(actionEvent -> {
+            try {
+                cancelLiveDataUpdates();
+                SceneController.goToProfile(actionEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        goToDoctorMenuBtn.setOnAction(actionEvent -> {
+            try {
+                cancelLiveDataUpdates();
+                SceneController.goToDoctorMenu(actionEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        goToEngineerMenuBtn.setOnAction(actionEvent -> {
+            try {
+                cancelLiveDataUpdates();
+                SceneController.goToEngineerMenu(actionEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     Timer timer = new Timer();
@@ -231,10 +258,10 @@ public class MainController {
             eCO2LabelData.setText("eCO2: " + String.valueOf((DataController.getData("co2")/100.0f)/10000.0f) + " %");
             tVOCLabelData.setText("tVOC: " + String.valueOf(((DataController.getData("tvoc")/100.0f)/1187.0f)*100.0f) + " %");
             HeartRateLabelData.setText(HeartRateLabel.getText() + ": " + String.valueOf(DataController.getData("heart rate")/100.0f) + " bpm");
-            Spo2LabelData.setText(Spo2Label.getText() + ": " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");
-            TemperatureLabelData.setText(TemperatureLabel.getText() + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
-            PressureLabelData.setText(PressureLabel.getText() + ": " + String.valueOf(((DataController.getData("pressure")/100.0f)/92110.3f)*100.0f) + " %");//среднегодовое атмосферное давление в алмате примерно равно: 92110,3
-            HumidityLabelData.setText(HumidityLabel.getText() + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
+            Spo2LabelData.setText("SpO2: " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");
+            TemperatureLabelData.setText(LanguageController.getString("temperature") + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
+            PressureLabelData.setText(LanguageController.getString("pressure") + ": " + String.valueOf(((DataController.getData("pressure")/100.0f)/92110.3f)*100.0f) + " %");//среднегодовое атмосферное давление в алмате примерно равно: 92110,3
+            HumidityLabelData.setText(LanguageController.getString("humidity") + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
 
             series.getData().add(new XYChart.Data<>(finalTimestampString, dataValue));
             // Необязательно: ограничьте количество точек данных
@@ -263,14 +290,13 @@ public class MainController {
     }
 
     private void updateLanguage() {
-        eCO2Label.setText("eCO2");
-        tVOCLabel.setText("tVOC");
-        Spo2Label.setText("Spo2");
-        HumidityLabel.setText(LanguageController.getString("humidity"));
-        TemperatureLabel.setText(LanguageController.getString("temperature"));
+//        eCO2Label.setText("eCO2");
+//        tVOCLabel.setText("tVOC");
+//        Spo2Label.setText("Spo2");
+//        HumidityLabel.setText(LanguageController.getString("humidity"));
+//        TemperatureLabel.setText(LanguageController.getString("temperature"));
+//        PressureLabel.setText(LanguageController.getString("pressure"));
         HeartRateLabel.setText(LanguageController.getString("heartRate"));
-        HeartRateLabel2.setText(LanguageController.getString("heartRate"));
-        PressureLabel.setText(LanguageController.getString("pressure"));
         LanguageLabel.setText(LanguageController.getString("languageText"));
         SelectComPortLabel.setText(LanguageController.getString("selectComPort"));
         detailedGraphButton.setText(LanguageController.getString("graphButton"));
@@ -279,9 +305,9 @@ public class MainController {
         ConfirmSendBtn.setText(LanguageController.getString("confirmSend"));
         GoToExportBtn.setText(LanguageController.getString("exportData"));
         HeartRateLabelData.setText(HeartRateLabel.getText() + ": " + String.valueOf(DataController.getData("heart rate")/100.0f) + " bpm");
-        Spo2LabelData.setText(Spo2Label.getText() + ": " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");
-        TemperatureLabelData.setText(TemperatureLabel.getText() + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
-        PressureLabelData.setText(PressureLabel.getText() + ": " + String.valueOf(((DataController.getData("pressure")/100.0f)/92110.3f)*100.0f) + " %");//среднегодовое атмосферное давление в алмате примерно равно: 92110,3
-        HumidityLabelData.setText(HumidityLabel.getText() + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
+        Spo2LabelData.setText("SpO2: " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");
+        TemperatureLabelData.setText(LanguageController.getString("temperature") + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
+        PressureLabelData.setText(LanguageController.getString("pressure") + ": " + String.valueOf(((DataController.getData("pressure")/100.0f)/92110.3f)*100.0f) + " %");//среднегодовое атмосферное давление в алмате примерно равно: 92110,3
+        HumidityLabelData.setText(LanguageController.getString("humidity") + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
     }
 }
