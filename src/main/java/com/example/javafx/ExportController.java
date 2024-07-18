@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.SplittableRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExportController {
@@ -76,6 +77,22 @@ public class ExportController {
     private CheckBox temperatureCheckBox;
 
     @FXML
+    private Label dataToExport;
+
+    @FXML
+    private Label timeRange;
+
+    @FXML
+    private Label from;
+
+    @FXML
+    private Label to;
+
+    private String errorTitle;
+    private String errorHeader;
+    private String errorContent;
+
+    @FXML
     private void initialize() throws SQLException {
         updateLanguage();
         // Подгрузка языков En, Ru, Kz
@@ -116,9 +133,9 @@ public class ExportController {
             }
             if (userId == 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("User not found");
-                alert.setContentText("Please select a user from the list");
+                alert.setTitle(errorTitle);
+                alert.setHeaderText(errorHeader);
+                alert.setContentText(errorContent);
                 alert.showAndWait();
                 return;
             }
@@ -264,5 +281,23 @@ public class ExportController {
     }
 
     private void updateLanguage() {
+        LanguageLabel.setText(LanguageController.getString("languageText"));
+        eCO2CheckBox.setText("eCO2");
+        tVOCCheckBox.setText("tVOC");
+        spO2CheckBox.setText("Spo2");
+        dataToExport.setText(LanguageController.getString("dataToExport"));
+        timeRange.setText(LanguageController.getString("timeRange"));
+        from.setText(LanguageController.getString("fromRange"));
+        to.setText(LanguageController.getString("toRange"));
+        ProgressBarLabel.setText(LanguageController.getString("progressLabel"));
+        heartRateCheckBox.setText(LanguageController.getString("heartRate"));
+        humidityCheckBox.setText(LanguageController.getString("humidity"));
+        pressureCheckBox.setText(LanguageController.getString("pressure"));
+        temperatureCheckBox.setText(LanguageController.getString("temperature"));
+        errorTitle = LanguageController.getString("errorTitle");
+        errorHeader = LanguageController.getString("errorHeader");
+        errorContent = LanguageController.getString("errorContent");
+        exportDataBtn.setText(LanguageController.getString("exportBtn"));
+        goToMainBtn.setText(LanguageController.getString("toMainBtn"));
     }
 }

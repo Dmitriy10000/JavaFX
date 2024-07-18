@@ -31,10 +31,10 @@ public class MainController {
     private Label Spo2Label;
 
     @FXML
-    private Label HeartRateLabel2;
+    private Label PressureLabel;
 
     @FXML
-    private Label PressureLabel;
+    private Label HeartRateLabel2;
 
     @FXML
     private Label eCO2LabelData;
@@ -67,18 +67,6 @@ public class MainController {
     private Label LanguageLabel;
 
     @FXML
-    private Label ServoMinText;
-
-    @FXML
-    private Label ServoMaxText;
-
-    @FXML
-    private Label ServoMinRightText;
-
-    @FXML
-    private Label ServoMaxRightText;
-
-    @FXML
     private Label SelectComPortLabel;
 
     @FXML
@@ -95,39 +83,6 @@ public class MainController {
 
     @FXML
     private ChoiceBox<String> languageChoiceBox;
-
-    @FXML
-    private Spinner<Integer> eco2Spinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> tVOCSpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> HumiditySpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> TemperatureSpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> HeartRateSpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> Spo2Spinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> PressureSpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> LeftServoMinSpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> LeftServoMaxSpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> RightServoMinSpinner = new Spinner<>();
-
-    @FXML
-    private Spinner<Integer> RightServoMaxSpinner = new Spinner<>();
 
     @FXML
     private Slider servo1Slider;
@@ -322,10 +277,6 @@ public class MainController {
         ServoLeftTitle.setText(LanguageController.getString("servoLeft"));
         ServoRightTitle.setText(LanguageController.getString("servoRight"));
         ConfirmSendBtn.setText(LanguageController.getString("confirmSend"));
-        ServoMinText.setText(LanguageController.getString("servoMin"));
-        ServoMaxText.setText(LanguageController.getString("servoMax"));
-        ServoMinRightText.setText(LanguageController.getString("servoMin"));
-        ServoMaxRightText.setText(LanguageController.getString("servoMax"));
         GoToExportBtn.setText(LanguageController.getString("exportData"));
         HeartRateLabelData.setText(HeartRateLabel.getText() + ": " + String.valueOf(DataController.getData("heart rate")/100.0f) + " bpm");
         Spo2LabelData.setText(Spo2Label.getText() + ": " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");

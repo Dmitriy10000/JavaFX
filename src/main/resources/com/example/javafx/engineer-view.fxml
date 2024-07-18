@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.EngineerController">
+   <center>
+      <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="10.0" style="-fx-background-color: rgb(235, 227, 213);" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label fx:id="EngineerMenuLabel" minHeight="0.0" minWidth="0.0" text="Engineer Menu" textFill="#776b5d">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <VBox minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="eCO2Label" minHeight="0.0" minWidth="0.0" text="eCO2" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="eco2Spinner" editable="true" minHeight="0.0" minWidth="0.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Spinner>
+                        <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="tVOCLabel" minHeight="0.0" minWidth="0.0" text="tVOC" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="tVOCSpinner" editable="true" minHeight="0.0" minWidth="0.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Spinner>
+                        <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="HeartRateLabel" text="Heart Rate" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="HeartRateSpinner" editable="true" minHeight="0.0" minWidth="0.0" />
+                        <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="Spo2Label" minHeight="0.0" minWidth="0.0" text="Spo2" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="Spo2Spinner" editable="true" minHeight="0.0" minWidth="0.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Spinner>
+                        <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="136.0" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="SpO2Threshold" minHeight="0.0" minWidth="0.0" text="Spo2 Threshold" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="SpO2ThresholdSpinner" editable="true" layoutX="10.0" layoutY="153.0" minHeight="0.0" minWidth="0.0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="PressureLabel" minHeight="0.0" minWidth="0.0" text="Pressure" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="PressureSpinner" editable="true" minHeight="0.0" minWidth="0.0" />
+                        <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="HumidityLabel" minHeight="0.0" minWidth="0.0" text="Humidity" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="HumiditySpinner" editable="true" minHeight="0.0" minWidth="0.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Spinner>
+                        <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="TemperatureLabel" minHeight="0.0" minWidth="0.0" text="Temperature" textFill="#776b5d" />
+                           </children>
+                        </HBox>
+                        <Spinner fx:id="TemperatureSpinner" editable="true" minHeight="0.0" minWidth="0.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Spinner>
+                        <Label fx:id="SelectUserLabel" text="Select user:" textFill="#776b5d" />
+                        <ComboBox fx:id="selectUserComboBox" editable="true" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+                  <VBox minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="ServoMinText" minHeight="0.0" minWidth="0.0" text="Servo Left Min" textFill="#776b5d" />
+                              <Spinner fx:id="LeftServoMinSpinner" editable="true" minHeight="0.0" minWidth="0.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="ServoMaxText" minHeight="0.0" minWidth="0.0" text="Servo Left Max" textFill="#776b5d" />
+                              <Spinner fx:id="LeftServoMaxSpinner" editable="true" minHeight="0.0" minWidth="0.0">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Spinner>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="ServoMinRightText" minHeight="0.0" minWidth="0.0" text="Servo Right Min" textFill="#776b5d">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Label>
+                              <Spinner fx:id="RightServoMinSpinner" editable="true" minHeight="0.0" minWidth="0.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="ServoMaxRightText" minHeight="0.0" minWidth="0.0" text="Servo Right Max" textFill="#776b5d" />
+                              <Spinner fx:id="RightServoMaxSpinner" editable="true" minHeight="0.0" minWidth="0.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="136.0" minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <Label fx:id="HeartRateThreshold" minHeight="0.0" minWidth="0.0" text="Heart Rate Threshold" textFill="#776b5d" />
+                              <Spinner fx:id="HeartRateThresholdSpinner" editable="true" minHeight="0.0" minWidth="0.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Button fx:id="SaveButton" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Save" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+         </padding>
+      </VBox>
+   </center>
+   <top>
+      <HBox alignment="TOP_RIGHT" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(119, 107, 93);" BorderPane.alignment="CENTER">
+         <children>
+            <VBox minHeight="0.0" minWidth="0.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="goToMainBtn" mnemonicParsing="false" style="-fx-background-color: rgb(235, 227, 213); -fx-background-radius: 20;" text="Go to menu" textFill="#776b5d" />
+               </children>
+            </VBox>
+            <VBox fx:id="Language" alignment="CENTER" minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label fx:id="LanguageLabel" minHeight="0.0" minWidth="0.0" text="Language:" textFill="#f3eeea" />
+               </children>
+            </VBox>
+            <ChoiceBox fx:id="languageChoiceBox" focusTraversable="false" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(235, 227, 213);" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </top>
+</BorderPane>

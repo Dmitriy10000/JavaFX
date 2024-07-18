@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.ExportController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.ExportController">
    <center>
       <VBox fx:id="MainVBox" alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="SelectUserLabel" minHeight="0.0" minWidth="0.0" text="Select user:" textFill="#776b5d" visible="false" />
             <ComboBox fx:id="selectUserComboBox" editable="true" focusTraversable="false" prefWidth="150.0" visible="false" />
-            <Label minHeight="0.0" minWidth="0.0" text="Select data to export:" textFill="#776b5d">
+            <Label fx:id="dataToExport" minHeight="0.0" minWidth="0.0" text="Select data to export:" textFill="#776b5d">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
@@ -42,7 +34,7 @@
                   </VBox>
                </children>
             </HBox>
-            <Label minHeight="0.0" minWidth="0.0" text="Select time range:" textFill="#776b5d">
+            <Label fx:id="timeRange" minHeight="0.0" minWidth="0.0" text="Select time range:" textFill="#776b5d">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
@@ -51,13 +43,13 @@
                <children>
                   <VBox minHeight="0.0" minWidth="0.0">
                      <children>
-                        <Label minHeight="0.0" minWidth="0.0" text="From" textFill="#776b5d" />
+                        <Label fx:id="from" minHeight="0.0" minWidth="0.0" text="From" textFill="#776b5d" />
                         <DatePicker fx:id="exportStartDatePicker" focusTraversable="false" minHeight="0.0" minWidth="100.0" prefWidth="100.0" />
                      </children>
                   </VBox>
                   <VBox minHeight="0.0" minWidth="0.0">
                      <children>
-                        <Label minHeight="0.0" minWidth="0.0" text="To" textFill="#776b5d" />
+                        <Label fx:id="to" minHeight="0.0" minWidth="0.0" text="To" textFill="#776b5d" />
                         <DatePicker fx:id="exportEndDatePicker" focusTraversable="false" minHeight="0.0" minWidth="100.0" prefWidth="100.0" />
                      </children>
                   </VBox>

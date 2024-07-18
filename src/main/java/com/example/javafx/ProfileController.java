@@ -1,10 +1,10 @@
 package com.example.javafx;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 
 public class ProfileController {
@@ -30,10 +30,25 @@ public class ProfileController {
     private TextField PhoneNumber;
 
     @FXML
-    private TextField Age;
+    private DatePicker DateOfBirth;
 
     @FXML
     private TextField Weight;
+
+    @FXML
+    private Label FirstNameLabel;
+
+    @FXML
+    private Label LastNameLabel;
+
+    @FXML
+    private Label PhoneNumberLabel;
+
+    @FXML
+    private Label DateOfBirthLabel;
+
+    @FXML
+    private Label WeightLabel;
 
     @FXML
     private Label GroupLabel;
@@ -61,7 +76,7 @@ public class ProfileController {
             String firstName = FirstName.getText();
             String lastName = LastName.getText();
             String phoneNumber = PhoneNumber.getText();
-            //int age = Age.getText();
+            Timestamp dateOfBirth = Timestamp.valueOf(DateOfBirth.getValue().atStartOfDay());
             String weight = Weight.getText();
             String groupChoice = GroupChoiceBox.getValue();
             String sexChoice = SexChoiceBox.getValue();
@@ -89,14 +104,21 @@ public class ProfileController {
     }
     private void updateLanguage() {
         LanguageLabel.setText(LanguageController.getString("languageText"));
-        UserProfileLabel.setText(LanguageController.getString(""));
-        FirstName.setPromptText(LanguageController.getString(""));
-        LastName.setPromptText(LanguageController.getString(""));
-        PhoneNumber.setPromptText(LanguageController.getString(""));
-        Age.setPromptText(LanguageController.getString(""));
-        Weight.setPromptText(LanguageController.getString(""));
-        GroupLabel.setText(LanguageController.getString(""));
-        SexLabel.setText(LanguageController.getString(""));
+        UserProfileLabel.setText(LanguageController.getString("userProfileLabel"));
+        FirstName.setPromptText(LanguageController.getString("firstName"));
+        LastName.setPromptText(LanguageController.getString("lastName"));
+        PhoneNumber.setPromptText(LanguageController.getString("phoneNumber"));
+        DateOfBirth.setPromptText(LanguageController.getString("dateOfBirth"));
+        Weight.setPromptText(LanguageController.getString("weight"));
+        GroupLabel.setText(LanguageController.getString("groups"));
+        SexLabel.setText(LanguageController.getString("sex"));
+        FirstNameLabel.setText(LanguageController.getString("firstNameLabel"));
+        LastNameLabel.setText(LanguageController.getString("lastNameLabel"));
+        PhoneNumberLabel.setText(LanguageController.getString("phoneNumberLabel"));
+        DateOfBirthLabel.setText(LanguageController.getString("dateOfBirthLabel"));
+        WeightLabel.setText(LanguageController.getString("weightLabel"));
+        SaveButton.setText(LanguageController.getString("saveBtn"));
+        goToMainBtn.setText(LanguageController.getString("toMainBtn"));
     }
 
 }
