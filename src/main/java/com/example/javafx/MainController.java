@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Objects;

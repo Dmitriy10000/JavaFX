@@ -2,7 +2,6 @@ package com.example.javafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -57,25 +56,25 @@ public class EngineerController
     private Spinner<Integer> HeartRateThresholdSpinner = new Spinner<>();
 
     @FXML
-    private Spinner<Integer> eco2Spinner = new Spinner<>();
+    private Spinner<Double> eco2Spinner = new Spinner<Double>();
 
     @FXML
-    private Spinner<Integer> tVOCSpinner = new Spinner<>();
+    private Spinner<Double> tVOCSpinner = new Spinner<>();
 
     @FXML
-    private Spinner<Integer> HumiditySpinner = new Spinner<>();
+    private Spinner<Double> HumiditySpinner = new Spinner<>();
 
     @FXML
-    private Spinner<Integer> TemperatureSpinner = new Spinner<>();
+    private Spinner<Double> TemperatureSpinner = new Spinner<>();
 
     @FXML
-    private Spinner<Integer> HeartRateSpinner = new Spinner<>();
+    private Spinner<Double> HeartRateSpinner = new Spinner<>();
 
     @FXML
-    private Spinner<Integer> Spo2Spinner = new Spinner<>();
+    private Spinner<Double> Spo2Spinner = new Spinner<>();
 
     @FXML
-    private Spinner<Integer> PressureSpinner = new Spinner<>();
+    private Spinner<Double> PressureSpinner = new Spinner<>();
 
     @FXML
     private Spinner<Integer> LeftServoMinSpinner = new Spinner<>();
@@ -125,19 +124,23 @@ public class EngineerController
         }
 
         SaveButton.setOnAction(actionEvent -> {
-            int HRTreshold = HeartRateThresholdSpinner.getValue();
-            int O2Threshold = SpO2ThresholdSpinner.getValue();
-            int eco2Coef = eco2Spinner.getValue();
-            int tvocCoef = tVOCSpinner.getValue();
-            int humidCoef = HumiditySpinner.getValue();
-            int tempCoef = TemperatureSpinner.getValue();
-            int hrCoef = HeartRateSpinner.getValue();
-            int spo2Coef = Spo2Spinner.getValue();
-            int pressureCoef = PressureSpinner.getValue();
-            int LSMin = LeftServoMinSpinner.getValue();
-            int LSMax = LeftServoMaxSpinner.getValue();
-            int RSMin = RightServoMinSpinner.getValue();
-            int RSMax = RightServoMaxSpinner.getValue();
+            // TODO
+//            int HRTreshold = HeartRateThresholdSpinner.getValue();
+//            int O2Threshold = SpO2ThresholdSpinner.getValue();
+
+            DBController.SensorsConfig.co2_coefficient = (int) (eco2Spinner.getValue() * 1000);
+            DBController.SensorsConfig.tvoc_coefficient = (int) (tVOCSpinner.getValue() * 1000);
+            DBController.SensorsConfig.heart_rate_coefficient = (int) (HeartRateSpinner.getValue() * 1000);
+            DBController.SensorsConfig.spo2_coefficient = (int) (Spo2Spinner.getValue() * 1000);
+            DBController.SensorsConfig.temperature_coefficient = (int) (TemperatureSpinner.getValue() * 1000);
+            DBController.SensorsConfig.pressure_coefficient = (int) (PressureSpinner.getValue() * 1000);
+            DBController.SensorsConfig.humidity_coefficient = (int) (HumiditySpinner.getValue() * 1000);
+            DBController.SensorsConfig.valve1_min = LeftServoMinSpinner.getValue();
+            DBController.SensorsConfig.valve1_max = LeftServoMaxSpinner.getValue();
+            DBController.SensorsConfig.valve2_min = RightServoMinSpinner.getValue();
+            DBController.SensorsConfig.valve2_max = RightServoMaxSpinner.getValue();
+
+            DBController.updateSensorsConfig(DBController.getUserId(selectUserComboBox.getValue()));
         });
 
         // При вводе в поле поиска пользователей обновляется список пользователей
@@ -149,8 +152,25 @@ public class EngineerController
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             // При выборе из выпадающего списка обновляется поле ввода
             selectUserComboBox.getEditor().setText(selectUserComboBox.getValue());
+
+            // При выборе пользователя обновляются все поля
+            int userId = DBController.getUserId(selectUserComboBox.getValue());
+            DBController.loadSensorsConfig(userId);
+            // -10.0f, 10.0f, DBController.SensorsConfig.co2_coefficient/1000.0f, 0.01f
+            eco2Spinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-10, 10, DBController.SensorsConfig.co2_coefficient/1000.0f, 0.01f));
+            tVOCSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-10, 10, DBController.SensorsConfig.tvoc_coefficient/1000.0f, 0.01f));
+            HumiditySpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-10, 10, DBController.SensorsConfig.humidity_coefficient/1000.0f, 0.01f));
+            TemperatureSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-10, 10, DBController.SensorsConfig.temperature_coefficient/1000.0f, 0.01f));
+            HeartRateSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-10, 10, DBController.SensorsConfig.heart_rate_coefficient/1000.0f, 0.01f));
+            Spo2Spinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-10, 10, DBController.SensorsConfig.spo2_coefficient/1000.0f, 0.01f));
+            PressureSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-10, 10, DBController.SensorsConfig.pressure_coefficient/1000.0f, 0.01f));
+            LeftServoMinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-1000, 1000, DBController.SensorsConfig.valve1_min, 1));
+            LeftServoMaxSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-1000, 1000, DBController.SensorsConfig.valve1_max, 1));
+            RightServoMinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-1000, 1000, DBController.SensorsConfig.valve2_min, 1));
+            RightServoMaxSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-1000, 1000, DBController.SensorsConfig.valve2_max, 1));
         });
 
         goToMainBtn.setOnAction(actionEvent -> {
@@ -173,6 +193,7 @@ public class EngineerController
             updateLanguage();
         });
     }
+
     private void updateLanguage(){
         eCO2Label.setText("eCO2");
         tVOCLabel.setText("tVOC");

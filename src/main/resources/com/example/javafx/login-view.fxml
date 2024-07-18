@@ -24,12 +24,12 @@
                <children>
                   <VBox minHeight="0.0" minWidth="0.0" spacing="10.0">
                      <children>
-                        <TextField fx:id="loginField" focusTraversable="false" minHeight="0.0" minWidth="0.0" prefHeight="26.0" prefWidth="278.0" promptText="Username" text="Admin">
+                        <TextField fx:id="loginField" focusTraversable="false" minHeight="0.0" minWidth="0.0" prefHeight="26.0" prefWidth="278.0" promptText="Username">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                         </TextField>
-                        <PasswordField fx:id="passwordField" focusTraversable="false" minHeight="0.0" minWidth="0.0" prefHeight="26.0" prefWidth="278.0" promptText="Password" text="123" />
+                        <PasswordField fx:id="passwordField" focusTraversable="false" minHeight="0.0" minWidth="0.0" prefHeight="26.0" prefWidth="278.0" promptText="Password" />
                      </children>
                      <HBox.margin>
                         <Insets />

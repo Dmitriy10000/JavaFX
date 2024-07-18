@@ -1,11 +1,7 @@
 package com.example.javafx;
 
 import javafx.scene.chart.XYChart;
-
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -334,7 +330,7 @@ public class DBController {
     }
 
     // Изменение конфигурации датчиков
-    public static void updateSensorsConfig() {
+    public static void updateSensorsConfig(int userId) {
         if (userId == 0) {
             System.out.println("Пользователь не авторизован.");
             return;
@@ -349,7 +345,7 @@ public class DBController {
                 SET valve1_min = ?, valve1_max = ?, valve2_min = ?, valve2_max = ?,
                     co2_coefficient = ?, tvoc_coefficient = ?, heart_rate_coefficient = ?, spo2_coefficient = ?,
                     temperature_coefficient = ?, pressure_coefficient = ?, humidity_coefficient = ?
-                WHERE id = 1
+                WHERE id = ?
             """;
             PreparedStatement preparedStatement = connection.prepareStatement(updateConfig);
             preparedStatement.setInt(1, SensorsConfig.valve1_min);
@@ -363,6 +359,7 @@ public class DBController {
             preparedStatement.setInt(9, SensorsConfig.temperature_coefficient);
             preparedStatement.setInt(10, SensorsConfig.pressure_coefficient);
             preparedStatement.setInt(11, SensorsConfig.humidity_coefficient);
+            preparedStatement.setInt(12, userId);
             preparedStatement.executeUpdate();
             System.out.println("Конфигурация датчиков успешно обновлена.");
         } catch (SQLException e) {
