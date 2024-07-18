@@ -14,7 +14,7 @@
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.ExportController">
    <center>
-      <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER">
+      <VBox fx:id="MainVBox" alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="SelectUserLabel" minHeight="0.0" minWidth="0.0" text="Select user:" textFill="#776b5d" visible="false" />
             <ComboBox fx:id="selectUserComboBox" editable="true" focusTraversable="false" prefWidth="150.0" visible="false" />
@@ -79,7 +79,7 @@
       </VBox>
    </center>
    <top>
-      <HBox alignment="TOP_RIGHT" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(119, 107, 93);" BorderPane.alignment="CENTER">
+      <HBox fx:id="FooterHBox" alignment="TOP_RIGHT" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(119, 107, 93);" BorderPane.alignment="CENTER">
          <children>
             <VBox minHeight="0.0" minWidth="0.0" HBox.hgrow="ALWAYS">
                <children>

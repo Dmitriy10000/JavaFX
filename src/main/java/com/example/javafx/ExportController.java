@@ -2,6 +2,7 @@ package com.example.javafx;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -18,7 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExportController {
     @FXML
-    private VBox Language;
+    private HBox FooterHBox;
+
+    @FXML
+    private VBox MainVBox;
 
     @FXML
     private Label LanguageLabel;
@@ -127,6 +131,8 @@ public class ExportController {
             // exportDataToXLS(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
             final int finalUserId = userId;
             new Thread(() -> {
+                Platform.runLater(() -> FooterHBox.setDisable(true));
+                Platform.runLater(() -> MainVBox.setDisable(true));
                 Platform.runLater(() -> progressBar.setProgress(0));
                 Platform.runLater(() -> progressBar.setVisible(true));
                 Platform.runLater(() -> ProgressBarLabel.setVisible(true));
@@ -154,6 +160,8 @@ public class ExportController {
                 Platform.runLater(() -> progressBar.setProgress(1));
                 Platform.runLater(() -> progressBar.setVisible(false));
                 Platform.runLater(() -> ProgressBarLabel.setVisible(false));
+                Platform.runLater(() -> FooterHBox.setDisable(false));
+                Platform.runLater(() -> MainVBox.setDisable(false));
             }).start();
             System.out.println("Экспорт завершен");
         });

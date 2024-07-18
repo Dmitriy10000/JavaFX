@@ -80,9 +80,6 @@ public class GraphController {
             Timestamp startDate = Timestamp.valueOf(startDatePicker.getValue().atStartOfDay());
             Timestamp endDate = Timestamp.valueOf(endDatePicker.getValue().atStartOfDay());
             DBController.dataArray data = DBController.getData(dataType, startDate, endDate);
-//            for (int i = 0; i < data.dataCount; i++) {
-//                System.out.println(data.date[i] + " " + data.data[i]);
-//            }
 
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             // Делаем подпись нашего графика
@@ -108,7 +105,6 @@ public class GraphController {
                 lineChart.getData().clear();
                 lineChart.getData().add(series);
                 scheduleLiveDataUpdates();
-
             } else {
                 dateHBox.setDisable(false);
                 // Убираем тень для кнопки
