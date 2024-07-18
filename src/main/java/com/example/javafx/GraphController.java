@@ -10,6 +10,8 @@ import javafx.application.Platform;
 import javafx.scene.layout.HBox;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,7 +29,7 @@ public class GraphController {
     private ChoiceBox<String> dataTypeChoiceBox;
 
     @FXML
-    private ChoiceBox<String> ComPortChoiceBox;
+    private ChoiceBox<String> languageChoiceBox;
 
     @FXML
     private DatePicker startDatePicker;
@@ -52,11 +54,23 @@ public class GraphController {
 
     @FXML
     private void initialize() {
+        updateLanguage();
+        // Подгрузка языков En, Ru, Kz
+        languageChoiceBox.getItems().addAll("English", "Русский", "Қазақша");
+        System.out.println(LanguageController.getLanguage());
+        if (LanguageController.getLanguage().equals("en")) languageChoiceBox.setValue("English");
+        if (LanguageController.getLanguage().equals("ru")) languageChoiceBox.setValue("Русский");
+        if (LanguageController.getLanguage().equals("kz")) languageChoiceBox.setValue("Қазақша");
+
+        if (Objects.equals(DBController.getUserType(), "doctor")) {
+//            SelectUserLabel.setVisible(true);
+//            selectUserComboBox.setVisible(true);
+//            List<String> users = DBController.searchUser("");
+//            selectUserComboBox.getItems().addAll(users);
+        }
+
         ComPortController comPortController = new ComPortController();
         comPortController.initializeSerialPort();
-
-        //ComPortChoiceBox.getItems().addAll(MainController.listAvailableComPorts());
-        //ComPortChoiceBox.setValue(ComPortController.portName);
 
         dataTypeChoiceBox.getItems().addAll("CO2", "tVOC", "Heart Rate", "Pressure", "Humidity", "Temperature");
         dataTypeChoiceBox.setValue("CO2");
@@ -122,9 +136,16 @@ public class GraphController {
             }
         });
 
-        ComPortChoiceBox.setOnAction(e -> {
-            ComPortController.portName = ComPortChoiceBox.getValue();
-            comPortController.initializeSerialPort();
+        languageChoiceBox.setOnAction(actionEvent -> {
+            String language = languageChoiceBox.getValue();
+            if (language.equals("English")) {
+                LanguageController.setLanguage("en");
+            } else if (language.equals("Русский")) {
+                LanguageController.setLanguage("ru");
+            } else if (language.equals("Қазақша")) {
+                LanguageController.setLanguage("kz");
+            }
+            updateLanguage();
         });
     }
 
@@ -182,5 +203,8 @@ public class GraphController {
     private Timestamp getCurrentTimestamp() {
         // Реализуйте логику получения текущего Timestamp (например, из System.currentTimeMillis())
         return new Timestamp(System.currentTimeMillis());
+    }
+
+    private void updateLanguage() {
     }
 }

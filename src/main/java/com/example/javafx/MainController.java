@@ -327,5 +327,10 @@ public class MainController {
         ServoMinRightText.setText(LanguageController.getString("servoMin"));
         ServoMaxRightText.setText(LanguageController.getString("servoMax"));
         GoToExportBtn.setText(LanguageController.getString("exportData"));
+        HeartRateLabelData.setText(HeartRateLabel.getText() + ": " + String.valueOf(DataController.getData("heart rate")/100.0f) + " bpm");
+        Spo2LabelData.setText(Spo2Label.getText() + ": " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");
+        TemperatureLabelData.setText(TemperatureLabel.getText() + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
+        PressureLabelData.setText(PressureLabel.getText() + ": " + String.valueOf(((DataController.getData("pressure")/100.0f)/92110.3f)*100.0f) + " %");//среднегодовое атмосферное давление в алмате примерно равно: 92110,3
+        HumidityLabelData.setText(HumidityLabel.getText() + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
     }
 }

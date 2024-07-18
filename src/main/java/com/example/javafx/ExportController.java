@@ -170,6 +170,18 @@ public class ExportController {
             // При выборе из выпадающего списка обновляется поле ввода
             selectUserComboBox.getEditor().setText(selectUserComboBox.getValue());
         });
+
+        languageChoiceBox.setOnAction(actionEvent -> {
+            String language = languageChoiceBox.getValue();
+            if (language.equals("English")) {
+                LanguageController.setLanguage("en");
+            } else if (language.equals("Русский")) {
+                LanguageController.setLanguage("ru");
+            } else if (language.equals("Қазақша")) {
+                LanguageController.setLanguage("kz");
+            }
+            updateLanguage();
+        });
     }
 
     // Вывод данных в XLS таблицу через JExcelApi

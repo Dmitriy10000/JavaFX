@@ -83,12 +83,6 @@
                   <Button fx:id="goToMainBtn" mnemonicParsing="false" style="-fx-background-color: rgb(235, 227, 213); -fx-background-radius: 20;" text="Go to menu" textFill="#776b5d" />
                </children>
             </VBox>
-            <VBox fx:id="Language1" alignment="CENTER" layoutX="495.0" layoutY="15.0" minHeight="0.0" minWidth="0.0">
-               <children>
-                  <Label fx:id="SelectComPortLabel" minHeight="0.0" minWidth="0.0" text="Select COM-port:" textFill="#f3eeea" />
-               </children>
-            </VBox>
-            <ChoiceBox fx:id="ComPortChoiceBox" minHeight="0.0" minWidth="0.0" style="-fx-background-color: rgb(235, 227, 213);" />
             <VBox fx:id="Language" alignment="CENTER" minHeight="0.0" minWidth="0.0">
                <children>
                   <Label fx:id="LanguageLabel" minHeight="0.0" minWidth="0.0" text="Language:" textFill="#f3eeea" />
