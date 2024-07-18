@@ -5,6 +5,7 @@ module com.example.javafx {
     requires org.xerial.sqlitejdbc;
     requires spring.security.crypto;
     requires com.fazecast.jSerialComm;
+    requires jxl;
 
 
     opens com.example.javafx to javafx.fxml;

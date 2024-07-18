@@ -492,8 +492,8 @@ public class DBController {
         return 0;
     }
 
-    // Вывод данных в CSV-файл
-    public static List<DataController> getDataToCSV(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to) {
+    // Получаем данные для экспорта в XLS
+    public static List<DataController.data> getDataToXLS(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to, int skip) {
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
             String selectData = "SELECT date";
             if (co2) selectData += ", co2";
@@ -515,9 +515,9 @@ public class DBController {
             preparedStatement.setInt(4, to-from);
             preparedStatement.setInt(5, from);
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<DataController> data = new ArrayList<>();
+            List<DataController.data> data = new ArrayList<>();
             while (resultSet.next()) {
-                DataController dc = new DataController();
+                DataController.data dc = new DataController.data();
                 dc.date = resultSet.getTimestamp("date");
                 if (co2) dc.eCO2 = resultSet.getInt("co2");
                 if (tvoc) dc.TVOC = resultSet.getInt("tvoc");
@@ -527,6 +527,9 @@ public class DBController {
                 if (pressure) dc.Pressure = resultSet.getInt("pressure");
                 if (humidity) dc.Humidity = resultSet.getInt("humidity");
                 data.add(dc);
+                for (int i = 0; i < skip; i++) {
+                    resultSet.next();
+                }
             }
             return data;
         } catch (SQLException e) {

@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaApplication extends Application {
 
@@ -13,6 +15,10 @@ public class JavaApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        test();
+    }
+
+    private void test() {
         // Тестирование таблицы users
         // Так происходит регистрация пользователя
         // (при регистрации пользователь автоматически входит в систему)

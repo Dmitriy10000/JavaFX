@@ -275,11 +275,11 @@ public class MainController {
         Platform.runLater(() -> {
             eCO2LabelData.setText("eCO2: " + String.valueOf((DataController.getData("co2")/100.0f)/10000.0f) + " %");
             tVOCLabelData.setText("tVOC: " + String.valueOf(((DataController.getData("tvoc")/100.0f)/1187.0f)*100.0f) + " %");
-            HumidityLabelData.setText(HumidityLabel.getText() + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
-            TemperatureLabelData.setText(TemperatureLabel.getText() + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
             HeartRateLabelData.setText(HeartRateLabel.getText() + ": " + String.valueOf(DataController.getData("heart rate")/100.0f) + " bpm");
             Spo2LabelData.setText(Spo2Label.getText() + ": " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");
+            TemperatureLabelData.setText(TemperatureLabel.getText() + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
             PressureLabelData.setText(PressureLabel.getText() + ": " + String.valueOf(((DataController.getData("pressure")/100.0f)/92110.3f)*100.0f) + " %");//среднегодовое атмосферное давление в алмате примерно равно: 92110,3
+            HumidityLabelData.setText(HumidityLabel.getText() + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
 
             series.getData().add(new XYChart.Data<>(finalTimestampString, dataValue));
             // Необязательно: ограничьте количество точек данных

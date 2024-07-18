@@ -2,17 +2,19 @@ package com.example.javafx;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExportController {
     @FXML
@@ -118,20 +120,36 @@ public class ExportController {
             }
 
             // Запрос на экспорт данных
-            System.out.println("Найдено " + DBController.getDataCount(userId, startDate, endDate) + " записей для экспорта");
-            int count = DBController.getDataCount(userId, startDate, endDate);
+            final int fullCount = DBController.getDataCount(userId, startDate, endDate);
+            System.out.println("Найдено " + fullCount + " записей для экспорта");
+            AtomicInteger count = new AtomicInteger(DBController.getDataCount(userId, startDate, endDate));
             // Выполняем экспорт в отдельном потоке, а потом обновляем прогрессбар
-            // exportDataToCSV(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
+            // exportDataToXLS(userId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
             final int finalUserId = userId;
             new Thread(() -> {
                 Platform.runLater(() -> progressBar.setProgress(0));
                 Platform.runLater(() -> progressBar.setVisible(true));
                 Platform.runLater(() -> ProgressBarLabel.setVisible(true));
-                for (int i = 0; i < count; i += 1000) {
-                    System.out.println("Экспорт с " + i + " по " + Math.min(i + 1000, count) + " запись");
-                    exportDataToCSV(finalUserId, startDate, endDate, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count));
-                    final int finalI = i;
-                    Platform.runLater(() -> progressBar.setProgress((double) finalI / count));
+                // Левый край диапазона - начало дня
+                Timestamp left = startDate;
+                // Правый край диапазона - конец дня
+                Timestamp right = Timestamp.valueOf(startDate.toLocalDateTime().plusDays(1).toLocalDate().atStartOfDay());
+                // Пока правый край диапазона меньше или равен конечной дате
+                int countBefore = 0;
+                while (right.compareTo(endDate) <= 0) {
+                    count.set(DBController.getDataCount(finalUserId, left, right));
+                    System.out.println("left: " + left + "\tright: " + right + "\tcount:" + count.get());
+                    if (count.get() > 0) {
+                        for (int i = 0; i < count.get(); i += 1000) {
+                            System.out.println("Экспорт с " + i + " по " + Math.min(i + 1000, count.get()) + " запись");
+                            exportDataToXLS(finalUserId, left, right, eCO2, tVOC, heartRate, spO2, temperature, pressure, humidity, i, Math.min(i + 1000, count.get()));
+                            final int finalI = i + countBefore;
+                            Platform.runLater(() -> progressBar.setProgress((double) finalI / fullCount));
+                        }
+                    }
+                    left = right;
+                    right = Timestamp.valueOf(right.toLocalDateTime().plusDays(1).toLocalDate().atStartOfDay());
+                    countBefore += count.get();
                 }
                 Platform.runLater(() -> progressBar.setProgress(1));
                 Platform.runLater(() -> progressBar.setVisible(false));
@@ -154,28 +172,73 @@ public class ExportController {
         });
     }
 
-    // Вывод данных в CSV-файл (дописывание в конец файла)
-    public static void exportDataToCSV(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to) {
+    // Вывод данных в XLS таблицу через JExcelApi
+    public static void exportDataToXLS(int userId, Timestamp start_date, Timestamp end_date, Boolean co2, Boolean tvoc, Boolean heart_rate, Boolean spO2, Boolean temperature, Boolean pressure, Boolean humidity, int from, int to) {
         try {
-            File file = new File("export.csv");
-            FileWriter fw = new FileWriter(file, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            List<DataController> data = DBController.getDataToCSV(userId, start_date, end_date, co2, tvoc, heart_rate, spO2, temperature, pressure, humidity, from, to);
-            for (DataController d : data) {
-                // Выводим date в читаемом формате
-                bw.write(d.date.toString().substring(0, 19));
-                if (co2) bw.write("," + d.getData("co2"));
-                if (tvoc) bw.write("," + d.getData("tvoc"));
-                if (heart_rate) bw.write("," + d.getData("heart rate"));
-                if (spO2) bw.write("," + d.getData("spo2"));
-                if (temperature) bw.write("," + d.getData("temperature"));
-                if (pressure) bw.write("," + d.getData("pressure"));
-                if (humidity) bw.write("," + d.getData("humidity"));
-                bw.newLine();
+            // Создаем новый файл, если его нет
+            File file = new File("export.xls");
+            if (!file.exists()) {
+                WritableWorkbook workbook = Workbook.createWorkbook(new File("export.xls"));
+                WritableSheet sheet = workbook.createSheet(start_date.toString().substring(0, 10), 0);
+
+                // Заполняем шапку таблицы
+                int i = 0;
+                sheet.addCell(new jxl.write.Label(i++, 0, "Time"));
+                if (co2) sheet.addCell(new jxl.write.Label(i++, 0, "eCO2 (%)"));
+                if (tvoc) sheet.addCell(new jxl.write.Label(i++, 0, "TVOC (%)"));
+                if (heart_rate) sheet.addCell(new jxl.write.Label(i++, 0, "Heart Rate"));
+                if (spO2) sheet.addCell(new jxl.write.Label(i++, 0, "SpO2 (%)"));
+                if (temperature) sheet.addCell(new jxl.write.Label(i++, 0, "Temperature"));
+                if (pressure) sheet.addCell(new jxl.write.Label(i++, 0, "Pressure"));
+                if (humidity) sheet.addCell(new jxl.write.Label(i, 0, "Humidity (%)"));
+
+                workbook.write();
+                workbook.close();
             }
-            bw.close();
-            fw.close();
-        } catch (IOException e) {
+
+            // Открываем лист который подписан датой из start_date обрезая время, если его нет, то создаем новый
+            Workbook copy = Workbook.getWorkbook(new File("export.xls"));
+            WritableWorkbook workbook = Workbook.createWorkbook(new File("export.xls"), copy);
+            WritableSheet sheet = workbook.getSheet(start_date.toString().substring(0, 10));
+            if (sheet == null) {
+                System.out.println("Создаем новый лист");
+                sheet = workbook.createSheet(start_date.toString().substring(0, 10), workbook.getNumberOfSheets());
+
+                // Заполняем шапку таблицы
+                int i = 0;
+                sheet.addCell(new jxl.write.Label(i++, 0, "Time"));
+                if (co2) sheet.addCell(new jxl.write.Label(i++, 0, "eCO2 (%)"));
+                if (tvoc) sheet.addCell(new jxl.write.Label(i++, 0, "TVOC (%)"));
+                if (heart_rate) sheet.addCell(new jxl.write.Label(i++, 0, "Heart Rate"));
+                if (spO2) sheet.addCell(new jxl.write.Label(i++, 0, "SpO2 (%)"));
+                if (temperature) sheet.addCell(new jxl.write.Label(i++, 0, "Temperature"));
+                if (pressure) sheet.addCell(new jxl.write.Label(i++, 0, "Pressure"));
+                if (humidity) sheet.addCell(new jxl.write.Label(i, 0, "Humidity (%)"));
+            }
+
+            // Получаем данные из БД
+            List<DataController.data> data = DBController.getDataToXLS(userId, start_date, end_date, co2, tvoc, heart_rate, spO2, temperature, pressure, humidity, from, to, 1);
+
+            // Вводим данные на первую свободную строку
+            int row = sheet.getRows();
+            assert data != null;
+            for (DataController.data d : data) {
+                int i = 0;
+                // Вырезаем дату из Timestamp
+                sheet.addCell(new jxl.write.Label(i++, row, d.date.toString().substring(11, 19)));
+                if (co2) sheet.addCell(new jxl.write.Number(i++, row, d.eCO2/100.0f/10000.0f));
+                if (tvoc) sheet.addCell(new jxl.write.Number(i++, row, d.TVOC/100.0f/1187.0f*100.0f));
+                if (heart_rate) sheet.addCell(new jxl.write.Number(i++, row, d.HeartRate/100.0f));
+                if (spO2) sheet.addCell(new jxl.write.Number(i++, row, d.SpO2/100.0f));
+                if (temperature) sheet.addCell(new jxl.write.Number(i++, row, d.Temperature/100.0f));
+                if (pressure) sheet.addCell(new jxl.write.Number(i++, row, d.Pressure/100.0f));
+                if (humidity) sheet.addCell(new jxl.write.Number(i, row, d.Humidity/100.0f));
+                row++;
+            }
+
+            workbook.write();
+            workbook.close();
+        } catch (IOException | BiffException | WriteException e) {
             e.printStackTrace();
         }
     }
