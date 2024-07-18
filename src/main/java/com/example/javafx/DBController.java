@@ -3,6 +3,7 @@ package com.example.javafx;
 import javafx.scene.chart.XYChart;
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -323,6 +324,64 @@ public class DBController {
         }
         return 0;
     }
+    public static boolean saveUserProfile(String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, String weight, String groupChoice, String sexChoice) {
+        int userId = getCurrentUserId();
+        if (userId == 0) {
+            System.out.println("User not authorized.");
+            return false;
+        }
+
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String updateProfile = """
+            INSERT INTO user_data (id, name, surname, birth_date, weight, group_id, sex, phone_number)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET
+                name = excluded.name,
+                surname = excluded.surname,
+                birth_date = excluded.birth_date,
+                weight = excluded.weight,
+                group_id = excluded.group_id,
+                sex = excluded.sex,
+                phone_number = excluded.phone_number
+        """;
+            PreparedStatement preparedStatement = connection.prepareStatement(updateProfile);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(2, firstName);
+            preparedStatement.setString(3, lastName);
+            preparedStatement.setDate(4, java.sql.Date.valueOf(dateOfBirth));
+            preparedStatement.setInt(5, Integer.parseInt(weight));
+            preparedStatement.setInt(6, getGroupId(groupChoice)); // Assuming you have a method to get group ID from group name
+            preparedStatement.setString(7, sexChoice.toLowerCase());
+            preparedStatement.setString(8, phoneNumber);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error saving user profile: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static int getGroupId(String groupChoice) {
+        // Implement a method to get group ID from group name
+        // This is just a placeholder implementation
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String selectGroup = """
+            SELECT id FROM groups WHERE en_name = ? OR ru_name = ? OR kz_name = ?
+        """;
+            PreparedStatement preparedStatement = connection.prepareStatement(selectGroup);
+            preparedStatement.setString(1, groupChoice);
+            preparedStatement.setString(2, groupChoice);
+            preparedStatement.setString(3, groupChoice);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting group ID: " + e.getMessage());
+        }
+        return 0; // Return a default value or handle error case
+    }
+
 
     // Получение id текущего пользователя
     public static int getCurrentUserId() {
