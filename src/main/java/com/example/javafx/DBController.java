@@ -366,6 +366,7 @@ public class DBController {
             return false;
         }
     }
+
     public static UserProfile getUserProfile(int userId) {
         UserProfile userProfile = null;
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
@@ -401,7 +402,6 @@ public class DBController {
         }
         return userProfile;
     }
-
 
     // Class to hold user profile information
     public static class UserProfile {
@@ -522,6 +522,7 @@ public class DBController {
         }
         return groups;
     }
+
     public static boolean isUserProfileCreated(int userId) {
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
             String selectProfile = """
@@ -781,5 +782,36 @@ public class DBController {
             }
             return users;
         }
+    }
+
+    public static String getGroupNameById(int groupId, String language) {
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String selectGroup = null;
+
+            switch (language) {
+                case "en":
+                    selectGroup = "SELECT en_name FROM groups WHERE id = ?";
+                    break;
+                case "ru":
+                    selectGroup = "SELECT ru_name FROM groups WHERE id = ?";
+                    break;
+                case "kz":
+                    selectGroup = "SELECT kz_name FROM groups WHERE id = ?";
+                    break;
+                default:
+                    return null;
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(selectGroup);
+            preparedStatement.setInt(1, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting group name: " + e.getMessage());
+        }
+        return null;
     }
 }
