@@ -10,7 +10,7 @@ import java.util.Objects;
 
 
 public class DBController {
-    private static final String DB_PATH = "jdbc:sqlite:src/main/resources/database.db";
+    private static final String DB_PATH = "jdbc:sqlite::resource:database.sqlite";
     private static int userId = 0;
 
     // Инициализация
