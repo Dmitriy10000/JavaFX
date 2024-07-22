@@ -44,7 +44,7 @@ public class JavaApplication extends Application {
 //        DataController dc = new DataController();
 //        dc.parseData(arduinoOutputString);
         // Тут генерируются данные, близкие к предыдущим (для теста)
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000; i++) {
             dc.regenerateData();
             dc.date = new Timestamp(System.currentTimeMillis() + i * 1000);
             DBController.insertData(dc);

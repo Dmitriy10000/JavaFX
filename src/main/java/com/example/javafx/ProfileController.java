@@ -9,7 +9,6 @@ import java.util.List;
 
 
 public class ProfileController {
-    private static final String DB_PATH = "jdbc:sqlite:src/main/resources/database.db";
 
     @FXML
     private ChoiceBox<String> languageChoiceBox;
@@ -98,7 +97,7 @@ public class ProfileController {
                 }
                 Weight.setText(userProfile.getWeight() != null ? userProfile.getWeight() : "");
                 Height.setText(userProfile.getHeight() != null ? userProfile.getHeight() : "");
-                GroupChoiceBox.setValue(getGroupNameById(userProfile.getGroupId(), LanguageController.getLanguage()));
+                GroupChoiceBox.setValue(DBController.getGroupNameById(userProfile.getGroupId(), LanguageController.getLanguage()));
                 if (userProfile.getSex() != null) {
                     SexChoiceBox.setValue(userProfile.getSex().equalsIgnoreCase("male") ? LanguageController.getString("man") : LanguageController.getString("woman"));
                 }
@@ -150,42 +149,14 @@ public class ProfileController {
             populateGroupChoiceBox();  // Repopulate groups based on new language
         });
     }
-    private String getGroupNameById(int groupId, String language) {
-        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
-            String selectGroup = null;
 
-            switch (language) {
-                case "en":
-                    selectGroup = "SELECT en_name FROM groups WHERE id = ?";
-                    break;
-                case "ru":
-                    selectGroup = "SELECT ru_name FROM groups WHERE id = ?";
-                    break;
-                case "kz":
-                    selectGroup = "SELECT kz_name FROM groups WHERE id = ?";
-                    break;
-                default:
-                    return null;
-            }
-
-            PreparedStatement preparedStatement = connection.prepareStatement(selectGroup);
-            preparedStatement.setInt(1, groupId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return resultSet.getString(1);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error getting group name: " + e.getMessage());
-        }
-        return null;
-    }
     private void populateGroupChoiceBox() {
         GroupChoiceBox.getItems().clear(); // Clear existing items
         String currentLanguage = LanguageController.getLanguage();
         List<String> groups = DBController.getAllGroups(currentLanguage);
         GroupChoiceBox.getItems().addAll(groups);
     }
+
     private void updateLanguage() {
         LanguageLabel.setText(LanguageController.getString("languageText"));
         UserProfileLabel.setText(LanguageController.getString("userProfileLabel"));
@@ -212,5 +183,4 @@ public class ProfileController {
                 LanguageController.getString("woman")
         );
     }
-
 }
