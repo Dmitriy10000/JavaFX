@@ -39,6 +39,9 @@ public class DoctorController {
     private Button saveButton;
 
     @FXML
+    private Button goToMainBtn;
+
+    @FXML
     private void initialize() {
         updateLanguage();
         languageChoiceBox.getItems().addAll("English", "Русский", "Қазақша");
@@ -47,9 +50,16 @@ public class DoctorController {
         if (LanguageController.getLanguage().equals("ru")) languageChoiceBox.setValue("Русский");
         if (LanguageController.getLanguage().equals("kz")) languageChoiceBox.setValue("Қазақша");
 
-
-
+        goToMainBtn.setOnAction(actionEvent -> {
+            try {
+                SceneController.goToMain(actionEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+
     private void updateLanguage() {
 
     }
