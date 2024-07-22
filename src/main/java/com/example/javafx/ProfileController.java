@@ -3,11 +3,14 @@ package com.example.javafx;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.List;
 
 
 public class ProfileController {
+    private static final String DB_PATH = "jdbc:sqlite:src/main/resources/database.db";
+
     @FXML
     private ChoiceBox<String> languageChoiceBox;
 
@@ -34,6 +37,12 @@ public class ProfileController {
 
     @FXML
     private TextField Weight;
+
+    @FXML
+    private TextField Height;
+
+    @FXML
+    private Label HeightLabel;
 
     @FXML
     private Label FirstNameLabel;
@@ -69,10 +78,34 @@ public class ProfileController {
     private void initialize() {
         updateLanguage();
         languageChoiceBox.getItems().addAll("English", "Русский", "Қазақша");
+        populateGroupChoiceBox();
         System.out.println(LanguageController.getLanguage());
         if (LanguageController.getLanguage().equals("en")) languageChoiceBox.setValue("English");
         if (LanguageController.getLanguage().equals("ru")) languageChoiceBox.setValue("Русский");
         if (LanguageController.getLanguage().equals("kz")) languageChoiceBox.setValue("Қазақша");
+
+        int currentUserId = DBController.getCurrentUserId();
+
+        if (DBController.isUserProfileCreated(currentUserId)) {
+            DBController.UserProfile userProfile = DBController.getUserProfile(currentUserId);
+
+            if (userProfile != null) {
+                FirstName.setText(userProfile.getName() != null ? userProfile.getName() : "");
+                LastName.setText(userProfile.getSurname() != null ? userProfile.getSurname() : "");
+                PhoneNumber.setText(userProfile.getPhoneNumber() != null ? userProfile.getPhoneNumber() : "");
+                if (userProfile.getBirthDate() != null) {
+                    DateOfBirth.setValue(userProfile.getBirthDate());
+                }
+                Weight.setText(userProfile.getWeight() != null ? userProfile.getWeight() : "");
+                Height.setText(userProfile.getHeight() != null ? userProfile.getHeight() : "");
+                GroupChoiceBox.setValue(getGroupNameById(userProfile.getGroupId(), LanguageController.getLanguage()));
+                if (userProfile.getSex() != null) {
+                    SexChoiceBox.setValue(userProfile.getSex().equalsIgnoreCase("male") ? LanguageController.getString("man") : LanguageController.getString("woman"));
+                }
+            }
+        } else {
+            System.out.println("User profile not created yet.");
+        }
 
         SaveButton.setOnAction(actionEvent -> {
             String firstName = FirstName.getText();
@@ -82,9 +115,10 @@ public class ProfileController {
             String weight = Weight.getText();
             String groupChoice = GroupChoiceBox.getValue();
             String sexChoice = SexChoiceBox.getValue();
-
+            String height = Height.getText();
+            String language = LanguageController.getLanguage();
             // Call the function to save user profile information
-            boolean success = DBController.saveUserProfile(firstName, lastName, phoneNumber, dateOfBirth, weight, groupChoice, sexChoice);
+            boolean success = DBController.saveUserProfile(firstName, lastName, phoneNumber, dateOfBirth, weight, groupChoice, sexChoice, height, language);
 
             if (success) {
                 // Show success message or handle success case
@@ -94,7 +128,6 @@ public class ProfileController {
                 System.err.println("Failed to save user profile.");
             }
         });
-
 
         goToMainBtn.setOnAction(actionEvent -> {
             try {
@@ -114,7 +147,44 @@ public class ProfileController {
                 LanguageController.setLanguage("kz");
             }
             updateLanguage();
+            populateGroupChoiceBox();  // Repopulate groups based on new language
         });
+    }
+    private String getGroupNameById(int groupId, String language) {
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String selectGroup = null;
+
+            switch (language) {
+                case "en":
+                    selectGroup = "SELECT en_name FROM groups WHERE id = ?";
+                    break;
+                case "ru":
+                    selectGroup = "SELECT ru_name FROM groups WHERE id = ?";
+                    break;
+                case "kz":
+                    selectGroup = "SELECT kz_name FROM groups WHERE id = ?";
+                    break;
+                default:
+                    return null;
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(selectGroup);
+            preparedStatement.setInt(1, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting group name: " + e.getMessage());
+        }
+        return null;
+    }
+    private void populateGroupChoiceBox() {
+        GroupChoiceBox.getItems().clear(); // Clear existing items
+        String currentLanguage = LanguageController.getLanguage();
+        List<String> groups = DBController.getAllGroups(currentLanguage);
+        GroupChoiceBox.getItems().addAll(groups);
     }
     private void updateLanguage() {
         LanguageLabel.setText(LanguageController.getString("languageText"));
@@ -124,15 +194,23 @@ public class ProfileController {
         PhoneNumber.setPromptText(LanguageController.getString("phoneNumber"));
         DateOfBirth.setPromptText(LanguageController.getString("dateOfBirth"));
         Weight.setPromptText(LanguageController.getString("weight"));
+        Height.setPromptText(LanguageController.getString("heightLabel"));
         GroupLabel.setText(LanguageController.getString("group"));
         SexLabel.setText(LanguageController.getString("sex"));
         FirstNameLabel.setText(LanguageController.getString("firstNameLabel"));
         LastNameLabel.setText(LanguageController.getString("lastNameLabel"));
         PhoneNumberLabel.setText(LanguageController.getString("phoneNumberLabel"));
         DateOfBirthLabel.setText(LanguageController.getString("dateOfBirthLabel"));
+        HeightLabel.setText(LanguageController.getString("height"));
         WeightLabel.setText(LanguageController.getString("weightLabel"));
         SaveButton.setText(LanguageController.getString("saveBtn"));
         goToMainBtn.setText(LanguageController.getString("toMainBtn"));
+        populateGroupChoiceBox();
+        SexChoiceBox.getItems().clear();
+        SexChoiceBox.getItems().addAll(
+                LanguageController.getString("man"),
+                LanguageController.getString("woman")
+        );
     }
 
 }

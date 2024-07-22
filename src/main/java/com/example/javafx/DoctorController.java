@@ -71,7 +71,18 @@ public class DoctorController {
             updateLanguage();
         });
         saveButton.setOnAction(actionEvent -> {
+            String nameEn = english.getText();
+            String nameKz = kazakh.getText();
+            String nameRu = russian.getText();
+            boolean success = DBController.createGroup(nameEn, nameRu, nameKz);
 
+            if (success) {
+                // Show success message or handle success case
+                System.out.println("User profile saved successfully.");
+            } else {
+                // Show error message or handle error case
+                System.err.println("Failed to save user profile.");
+            }
         });
 
     }

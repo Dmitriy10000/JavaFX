@@ -94,8 +94,9 @@ public class DBController {
                         birth_date DATE,
                         weight INTEGER,
                         group_id INTEGER,
-                        sex VARCHAR(255) CHECK(sex IN ('male', 'female')),
-                        phone_number VARCHAR(255)
+                        sex VARCHAR(255),
+                        phone_number VARCHAR(255),
+                        height VARCHAR(255)
                     )
                 """;
                 statement.execute(createUserData);
@@ -327,7 +328,7 @@ public class DBController {
         return 0;
     }
 
-    public static boolean saveUserProfile(String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, String weight, String groupChoice, String sexChoice) {
+    public static boolean saveUserProfile(String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, String weight, String groupChoice, String sexChoice, String height, String language) {
         int userId = getCurrentUserId();
         if (userId == 0) {
             System.out.println("User not authorized.");
@@ -336,8 +337,8 @@ public class DBController {
 
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
             String updateProfile = """
-            INSERT INTO user_data (id, name, surname, birth_date, weight, group_id, sex, phone_number)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO user_data (id, name, surname, birth_date, weight, group_id, sex, phone_number, height)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(id) DO UPDATE SET
                 name = excluded.name,
                 surname = excluded.surname,
@@ -345,7 +346,8 @@ public class DBController {
                 weight = excluded.weight,
                 group_id = excluded.group_id,
                 sex = excluded.sex,
-                phone_number = excluded.phone_number
+                phone_number = excluded.phone_number,
+                height = excluded.height
         """;
             PreparedStatement preparedStatement = connection.prepareStatement(updateProfile);
             preparedStatement.setInt(1, userId);
@@ -353,9 +355,10 @@ public class DBController {
             preparedStatement.setString(3, lastName);
             preparedStatement.setDate(4, java.sql.Date.valueOf(dateOfBirth));
             preparedStatement.setInt(5, Integer.parseInt(weight));
-            preparedStatement.setInt(6, getGroupId(groupChoice)); // Assuming you have a method to get group ID from group name
+            preparedStatement.setInt(6, getGroupId(groupChoice, language)); // Assuming you have a method to get group ID from group name
             preparedStatement.setString(7, sexChoice.toLowerCase());
             preparedStatement.setString(8, phoneNumber);
+            preparedStatement.setString(9, height);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -363,19 +366,120 @@ public class DBController {
             return false;
         }
     }
-
-    private static int getGroupId(String groupChoice) {
-        // Implement a method to get group ID from group name
-        // This is just a placeholder implementation
+    public static UserProfile getUserProfile(int userId) {
+        UserProfile userProfile = null;
         try (Connection connection = DriverManager.getConnection(DB_PATH)) {
-            String selectGroup = """
-            SELECT id FROM groups WHERE en_name = ? OR ru_name = ? OR kz_name = ?
+            String selectProfile = """
+            SELECT name, surname, phone_number, birth_date, weight, group_id, sex, height
+            FROM user_data
+            WHERE id = ?
         """;
+            PreparedStatement preparedStatement = connection.prepareStatement(selectProfile);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                LocalDate birthDate = null;
+                Date birthDateSql = resultSet.getDate("birth_date");
+                if (birthDateSql != null) {
+                    birthDate = birthDateSql.toLocalDate();
+                }
+
+                userProfile = new UserProfile(
+                        resultSet.getString("name"),
+                        resultSet.getString("surname"),
+                        resultSet.getString("phone_number"),
+                        birthDate,
+                        resultSet.getString("weight"),
+                        resultSet.getInt("group_id"),
+                        resultSet.getString("sex"),
+                        resultSet.getString("height")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving user profile: " + e.getMessage());
+        }
+        return userProfile;
+    }
+
+
+    // Class to hold user profile information
+    public static class UserProfile {
+        private String name;
+        private String surname;
+        private String phoneNumber;
+        private LocalDate birthDate;
+        private String weight;
+        private int groupId;
+        private String sex;
+        private String height;
+
+        public UserProfile(String name, String surname, String phoneNumber, LocalDate birthDate, String weight, int groupId, String sex, String height) {
+            this.name = name;
+            this.surname = surname;
+            this.phoneNumber = phoneNumber;
+            this.birthDate = birthDate;
+            this.weight = weight;
+            this.groupId = groupId;
+            this.sex = sex;
+            this.height = height;
+        }
+
+        // Getters
+        public String getName() { return name; }
+        public String getSurname() { return surname; }
+        public String getPhoneNumber() { return phoneNumber; }
+        public LocalDate getBirthDate() { return birthDate; }
+        public String getWeight() { return weight; }
+        public int getGroupId() { return groupId; }
+        public String getSex() { return sex; }
+        public String getHeight() { return height; }
+    }
+
+    public static boolean createGroup(String enName, String ruName, String kzName) {
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String insertGroup = """
+            INSERT INTO groups (en_name, ru_name, kz_name)
+            VALUES (?, ?, ?)
+        """;
+            PreparedStatement preparedStatement = connection.prepareStatement(insertGroup);
+            preparedStatement.setString(1, enName);
+            preparedStatement.setString(2, ruName);
+            preparedStatement.setString(3, kzName);
+            preparedStatement.executeUpdate();
+            System.out.println("Group created successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error creating group: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static int getGroupId(String groupChoice, String language) {
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String selectGroup = null;
+
+            // Determine the column to search based on the language
+            switch (language) {
+                case "en":
+                    selectGroup = "SELECT id FROM groups WHERE en_name = ?";
+                    break;
+                case "ru":
+                    selectGroup = "SELECT id FROM groups WHERE ru_name = ?";
+                    break;
+                case "kz":
+                    selectGroup = "SELECT id FROM groups WHERE kz_name = ?";
+                    break;
+                default:
+                    System.err.println("Unsupported language: " + language);
+                    return 0;
+            }
+
+            // Prepare and execute the query
             PreparedStatement preparedStatement = connection.prepareStatement(selectGroup);
             preparedStatement.setString(1, groupChoice);
-            preparedStatement.setString(2, groupChoice);
-            preparedStatement.setString(3, groupChoice);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             if (resultSet.next()) {
                 return resultSet.getInt("id");
             }
@@ -383,6 +487,57 @@ public class DBController {
             System.err.println("Error getting group ID: " + e.getMessage());
         }
         return 0; // Return a default value or handle error case
+    }
+
+    public static List<String> getAllGroups(String language) {
+        List<String> groups = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String selectGroups = null;
+
+            // Determine the column to select based on the language
+            switch (language) {
+                case "en":
+                    selectGroups = "SELECT en_name FROM groups";
+                    break;
+                case "ru":
+                    selectGroups = "SELECT ru_name FROM groups";
+                    break;
+                case "kz":
+                    selectGroups = "SELECT kz_name FROM groups";
+                    break;
+                default:
+                    System.err.println("Unsupported language: " + language);
+                    return groups;
+            }
+
+            // Prepare and execute the query
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(selectGroups);
+
+            while (resultSet.next()) {
+                groups.add(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving groups: " + e.getMessage());
+        }
+        return groups;
+    }
+    public static boolean isUserProfileCreated(int userId) {
+        try (Connection connection = DriverManager.getConnection(DB_PATH)) {
+            String selectProfile = """
+            SELECT COUNT(*) FROM user_data WHERE id = ?
+        """;
+            PreparedStatement preparedStatement = connection.prepareStatement(selectProfile);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking if user profile is created: " + e.getMessage());
+        }
+        return false;
     }
 
     // Получение id текущего пользователя
