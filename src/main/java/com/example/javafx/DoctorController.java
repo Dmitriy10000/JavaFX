@@ -58,6 +58,7 @@ public class DoctorController {
                 e.printStackTrace();
             }
         });
+
         languageChoiceBox.setOnAction(actionEvent -> {
             String language = languageChoiceBox.getValue();
             if (language.equals("English")) {
@@ -72,7 +73,10 @@ public class DoctorController {
         saveButton.setOnAction(actionEvent -> {
 
         });
+
     }
+
+
     private void updateLanguage() {
         LanguageLabel.setText(LanguageController.getString("languageText"));
         doctorTitle.setText(LanguageController.getString("doctorTitle"));

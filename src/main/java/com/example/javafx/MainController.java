@@ -306,24 +306,22 @@ public class MainController {
     }
 
     private void updateLanguage() {
-//        eCO2Label.setText("eCO2");
-//        tVOCLabel.setText("tVOC");
-//        Spo2Label.setText("Spo2");
-//        HumidityLabel.setText(LanguageController.getString("humidity"));
-//        TemperatureLabel.setText(LanguageController.getString("temperature"));
-//        PressureLabel.setText(LanguageController.getString("pressure"));
-        HeartRateLabel.setText(LanguageController.getString("heartRate"));
-        LanguageLabel.setText(LanguageController.getString("languageText"));
+        LogoutBtn.setText(LanguageController.getString("logout"));
         SelectComPortLabel.setText(LanguageController.getString("selectComPort"));
-        detailedGraphButton.setText(LanguageController.getString("graphButton"));
+        LanguageLabel.setText(LanguageController.getString("languageText"));
+        HeartRateLabel.setText(LanguageController.getString("heartRate"));
         ServoLeftTitle.setText(LanguageController.getString("servoLeft"));
         ServoRightTitle.setText(LanguageController.getString("servoRight"));
         ConfirmSendBtn.setText(LanguageController.getString("confirmSend"));
         GoToExportBtn.setText(LanguageController.getString("exportData"));
+        detailedGraphButton.setText(LanguageController.getString("graphButton"));
+        goToProfileBtn.setText(LanguageController.getString("profile"));
+        goToDoctorMenuBtn.setText(LanguageController.getString("doctorMenu"));
+        goToEngineerMenuBtn.setText(LanguageController.getString("engineerMenu"));
         HeartRateLabelData.setText(HeartRateLabel.getText() + ": " + String.valueOf(DataController.getData("heart rate")/100.0f) + " bpm");
         Spo2LabelData.setText("SpO2: " + String.valueOf(DataController.getData("spo2")/100.0f) + " %");
-        TemperatureLabelData.setText(LanguageController.getString("temperature") + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
         PressureLabelData.setText(LanguageController.getString("pressure") + ": " + String.valueOf(((DataController.getData("pressure")/100.0f)/92110.3f)*100.0f) + " %");//среднегодовое атмосферное давление в алмате примерно равно: 92110,3
         HumidityLabelData.setText(LanguageController.getString("humidity") + ": " + String.valueOf(DataController.getData("humidity")/100.0f) + " %");
+        TemperatureLabelData.setText(LanguageController.getString("temperature") + ": " + String.valueOf(DataController.getData("temperature")/100.0f) + " *C");
     }
 }

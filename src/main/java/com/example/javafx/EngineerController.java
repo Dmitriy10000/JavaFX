@@ -139,6 +139,8 @@ public class EngineerController
             DBController.SensorsConfig.valve1_max = LeftServoMaxSpinner.getValue();
             DBController.SensorsConfig.valve2_min = RightServoMinSpinner.getValue();
             DBController.SensorsConfig.valve2_max = RightServoMaxSpinner.getValue();
+            DBController.SensorsConfig.spo2_threshold = SpO2ThresholdSpinner.getValue();
+            DBController.SensorsConfig.heart_rate_threshold = HeartRateThresholdSpinner.getValue();
 
             DBController.updateSensorsConfig(DBController.getUserId(selectUserComboBox.getValue()));
         });
@@ -171,6 +173,8 @@ public class EngineerController
             LeftServoMaxSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-1000, 1000, DBController.SensorsConfig.valve1_max, 1));
             RightServoMinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-1000, 1000, DBController.SensorsConfig.valve2_min, 1));
             RightServoMaxSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-1000, 1000, DBController.SensorsConfig.valve2_max, 1));
+            SpO2ThresholdSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, DBController.SensorsConfig.spo2_threshold, 1));
+            HeartRateThresholdSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, DBController.SensorsConfig.heart_rate_threshold, 1));
         });
 
         goToMainBtn.setOnAction(actionEvent -> {

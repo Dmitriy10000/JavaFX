@@ -60,7 +60,9 @@ public class DBController {
                         spo2_coefficient INTEGER NOT NULL DEFAULT 1000,
                         temperature_coefficient INTEGER NOT NULL DEFAULT 1000,
                         pressure_coefficient INTEGER NOT NULL DEFAULT 1000,
-                        humidity_coefficient INTEGER NOT NULL DEFAULT 1000
+                        humidity_coefficient INTEGER NOT NULL DEFAULT 1000,
+                        heart_rate_threshold INTEGER NOT NULL DEFAULT 170,
+                        spo2_threshold INTEGER NOT NULL DEFAULT 85
                     )
                 """;
                 statement.execute(createSensorsConfigTable);
@@ -324,6 +326,7 @@ public class DBController {
         }
         return 0;
     }
+
     public static boolean saveUserProfile(String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, String weight, String groupChoice, String sexChoice) {
         int userId = getCurrentUserId();
         if (userId == 0) {
@@ -382,7 +385,6 @@ public class DBController {
         return 0; // Return a default value or handle error case
     }
 
-
     // Получение id текущего пользователя
     public static int getCurrentUserId() {
         return userId;
@@ -403,7 +405,8 @@ public class DBController {
                 UPDATE sensors_config
                 SET valve1_min = ?, valve1_max = ?, valve2_min = ?, valve2_max = ?,
                     co2_coefficient = ?, tvoc_coefficient = ?, heart_rate_coefficient = ?, spo2_coefficient = ?,
-                    temperature_coefficient = ?, pressure_coefficient = ?, humidity_coefficient = ?
+                    temperature_coefficient = ?, pressure_coefficient = ?, humidity_coefficient = ?,
+                    heart_rate_threshold = ?, spo2_threshold = ?
                 WHERE id = ?
             """;
             PreparedStatement preparedStatement = connection.prepareStatement(updateConfig);
@@ -418,7 +421,9 @@ public class DBController {
             preparedStatement.setInt(9, SensorsConfig.temperature_coefficient);
             preparedStatement.setInt(10, SensorsConfig.pressure_coefficient);
             preparedStatement.setInt(11, SensorsConfig.humidity_coefficient);
-            preparedStatement.setInt(12, userId);
+            preparedStatement.setInt(12, SensorsConfig.heart_rate_threshold);
+            preparedStatement.setInt(13, SensorsConfig.spo2_threshold);
+            preparedStatement.setInt(14, userId);
             preparedStatement.executeUpdate();
             System.out.println("Конфигурация датчиков успешно обновлена.");
         } catch (SQLException e) {
@@ -439,6 +444,8 @@ public class DBController {
         static int temperature_coefficient = 0;
         static int pressure_coefficient = 0;
         static int humidity_coefficient = 0;
+        static int heart_rate_threshold = 0;
+        static int spo2_threshold = 0;
     }
 
     // Получение конфигурации датчиков
@@ -462,6 +469,8 @@ public class DBController {
                 SensorsConfig.temperature_coefficient = resultSet.getInt("temperature_coefficient");
                 SensorsConfig.pressure_coefficient = resultSet.getInt("pressure_coefficient");
                 SensorsConfig.humidity_coefficient = resultSet.getInt("humidity_coefficient");
+                SensorsConfig.heart_rate_threshold = resultSet.getInt("heart_rate_threshold");
+                SensorsConfig.spo2_threshold = resultSet.getInt("spo2_threshold");
             }
         } catch (SQLException e) {
             System.err.println("Ошибка получения конфигурации датчиков: " + e.getMessage());
