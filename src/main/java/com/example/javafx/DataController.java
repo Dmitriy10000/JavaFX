@@ -59,11 +59,21 @@ public class DataController {
             String HeartRateString = line.substring("Heart Rate: ".length());
             HeartRate = (int) (Float.parseFloat(HeartRateString) * 100);
             HeartRate = (int) ((long) HeartRate * DBController.SensorsConfig.heart_rate_coefficient / 1000);
+            if((HeartRate/100.0f) >=170 ){
+                Warning = true;
+            }else {
+                Warning = false;
+            }
         }
         if (line.startsWith("SpO2: ") && line.contains(" %")){
             String Spo2String = line.substring("SpO2: ".length(), line.indexOf(" %"));
             SpO2 = (int) (Float.parseFloat(Spo2String) * 100);
             SpO2 = (int) ((long) SpO2 * DBController.SensorsConfig.spo2_coefficient / 1000);
+            if((SpO2/100.0f) <=65){
+                Warning = true;
+            }else {
+                Warning = false;
+            }
         }
         if (line.startsWith("Pressure: ") && line.contains(" Pa")) {
             String PressureString = line.substring("Pressure: ".length(), line.indexOf(" Pa"));
