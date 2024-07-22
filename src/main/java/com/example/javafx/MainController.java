@@ -119,13 +119,13 @@ public class MainController {
             goToProfileBtn.setVisible(true);
         }
         else if (Objects.equals(DBController.getUserType(), "doctor")) {
-            DBController.loadSensorsConfig(DBController.getUserId(DBController.searchUser("").getFirst()));
+            /*DBController.loadSensorsConfig(DBController.getUserId(DBController.searchUser("").getFirst()));*/
             GoToExportBtn.setVisible(true);
             detailedGraphButton.setVisible(true);
             goToDoctorMenuBtn.setVisible(true);
         }
         else if (Objects.equals(DBController.getUserType(), "engineer")) {
-            DBController.loadSensorsConfig(DBController.getUserId(DBController.searchUser("").getFirst()));
+            /*DBController.loadSensorsConfig(DBController.getUserId(DBController.searchUser("").getFirst()));*/
             goToEngineerMenuBtn.setVisible(true);
         }
         servo1Slider.setMin(DBController.SensorsConfig.valve1_min);
