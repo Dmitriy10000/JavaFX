@@ -15,6 +15,7 @@
 package com.example.javafx;
 
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 
 import java.sql.*;
 
@@ -33,6 +34,23 @@ public class DataController {
 
     public static boolean Warning = false;
 
+    public class AlertManager {
+        private static boolean alertOpen = false;
+
+        public static void showAlert(String message, String title) {
+            if (!alertOpen) {
+                alertOpen = true;
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setTitle(title);
+                alert.setHeaderText(null);
+                alert.setContentText(message);
+                alert.setOnHidden(evt -> alertOpen = false); // Reset the flag when the alert is closed
+                alert.show();
+            }
+        }
+    }
     public static class data {
         Timestamp date;
         int eCO2;
@@ -61,14 +79,11 @@ public class DataController {
             String HeartRateString = line.substring("Heart Rate: ".length());
             HeartRate = (int) (Float.parseFloat(HeartRateString) * 100);
             HeartRate = (int) ((long) HeartRate * DBController.SensorsConfig.heart_rate_coefficient / 1000);
-            if((HeartRate/100.0f) >=DBController.SensorsConfig.heart_rate_threshold ){
+            if ((HeartRate / 100.0f) >= DBController.SensorsConfig.heart_rate_threshold) {
                 Warning = true;
                 String alertMessage = LanguageController.getHeartRateAlertMessage();
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle(LanguageController.getString("warningTitle")); // Ensure this key is in your properties files
-                alert.setHeaderText(null);
-                alert.setContentText(alertMessage);
-                alert.showAndWait();
+                String alertTitle = LanguageController.getString("warningTitle"); // Ensure this key is in your properties files
+                AlertManager.showAlert(alertMessage, alertTitle);
             }else {
                 Warning = false;
             }
@@ -77,14 +92,12 @@ public class DataController {
             String Spo2String = line.substring("SpO2: ".length(), line.indexOf(" %"));
             SpO2 = (int) (Float.parseFloat(Spo2String) * 100);
             SpO2 = (int) ((long) SpO2 * DBController.SensorsConfig.spo2_coefficient / 1000);
-            if((SpO2/100.0f) <=DBController.SensorsConfig.spo2_threshold){
+            if ((SpO2 / 100.0f) <= DBController.SensorsConfig.spo2_threshold) {
                 Warning = true;
+
                 String alertMessage = LanguageController.getSpO2AlertMessage();
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle(LanguageController.getString("warningTitle")); // Ensure this key is in your properties files
-                alert.setHeaderText(null);
-                alert.setContentText(alertMessage);
-                alert.showAndWait();
+                String alertTitle = LanguageController.getString("warningTitle");
+                AlertManager.showAlert(alertMessage, alertTitle);
             }else {
                 Warning = false;
             }
