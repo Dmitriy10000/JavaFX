@@ -600,8 +600,8 @@ public class DBController {
         static int temperature_coefficient = 0;
         static int pressure_coefficient = 0;
         static int humidity_coefficient = 0;
-        static int heart_rate_threshold = 0;
-        static int spo2_threshold = 0;
+        static int heart_rate_threshold = 170;
+        static int spo2_threshold = 85;
     }
 
     // Получение конфигурации датчиков
