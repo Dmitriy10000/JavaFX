@@ -14,6 +14,8 @@
 // Temperature: -36.85 *C
 package com.example.javafx;
 
+import javafx.scene.control.Alert;
+
 import java.sql.*;
 
 import static java.sql.Types.NULL;
@@ -59,8 +61,14 @@ public class DataController {
             String HeartRateString = line.substring("Heart Rate: ".length());
             HeartRate = (int) (Float.parseFloat(HeartRateString) * 100);
             HeartRate = (int) ((long) HeartRate * DBController.SensorsConfig.heart_rate_coefficient / 1000);
-            if((HeartRate/100.0f) >=170 ){
+            if((HeartRate/100.0f) >=DBController.SensorsConfig.heart_rate_threshold ){
                 Warning = true;
+                String alertMessage = LanguageController.getHeartRateAlertMessage();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle(LanguageController.getString("warningTitle")); // Ensure this key is in your properties files
+                alert.setHeaderText(null);
+                alert.setContentText(alertMessage);
+                alert.showAndWait();
             }else {
                 Warning = false;
             }
@@ -69,8 +77,14 @@ public class DataController {
             String Spo2String = line.substring("SpO2: ".length(), line.indexOf(" %"));
             SpO2 = (int) (Float.parseFloat(Spo2String) * 100);
             SpO2 = (int) ((long) SpO2 * DBController.SensorsConfig.spo2_coefficient / 1000);
-            if((SpO2/100.0f) <=65){
+            if((SpO2/100.0f) <=DBController.SensorsConfig.spo2_threshold){
                 Warning = true;
+                String alertMessage = LanguageController.getSpO2AlertMessage();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle(LanguageController.getString("warningTitle")); // Ensure this key is in your properties files
+                alert.setHeaderText(null);
+                alert.setContentText(alertMessage);
+                alert.showAndWait();
             }else {
                 Warning = false;
             }
@@ -89,6 +103,11 @@ public class DataController {
             String TemperatureString = line.substring("Temperature: ".length(), line.indexOf(" *C"));
             Temperature = (int) (Float.parseFloat(TemperatureString) * 100);
             Temperature = (int) ((long) Temperature * DBController.SensorsConfig.temperature_coefficient / 1000);
+        }
+        if(Warning == true){
+            ComPortController.sendWarningCommand();
+            //System.out.println("Сердцебиение: " +HeartRate);
+            ComPortController.sendServoCommands(0,0);
         }
     }
 

@@ -176,11 +176,24 @@ public class ProfileController {
         WeightLabel.setText(LanguageController.getString("weightLabel"));
         SaveButton.setText(LanguageController.getString("saveBtn"));
         goToMainBtn.setText(LanguageController.getString("toMainBtn"));
-        populateGroupChoiceBox();
         SexChoiceBox.getItems().clear();
         SexChoiceBox.getItems().addAll(
                 LanguageController.getString("man"),
                 LanguageController.getString("woman")
         );
+        int currentUserId = DBController.getCurrentUserId();
+
+        if (DBController.isUserProfileCreated(currentUserId)) {
+            DBController.UserProfile userProfile = DBController.getUserProfile(currentUserId);
+
+            if (userProfile != null) {
+                GroupChoiceBox.setValue(DBController.getGroupNameById(userProfile.getGroupId(), LanguageController.getLanguage()));
+                if (userProfile.getSex() != null) {
+                    SexChoiceBox.setValue(userProfile.getSex().equalsIgnoreCase("male") ? LanguageController.getString("man") : LanguageController.getString("woman"));
+                }
+            }
+        } else {
+            System.out.println("User profile not created yet.");
+        }
     }
 }

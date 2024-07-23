@@ -18,4 +18,10 @@ public class LanguageController {
     public static String getString(String key) {
         return bundle.getString(key);
     }
+    public static String getHeartRateAlertMessage() {
+        return bundle.getString("heartRateAlertMessage");
+    }
+    public static String getSpO2AlertMessage() {
+        return bundle.getString("spo2AlertMessage");
+    }
 }
