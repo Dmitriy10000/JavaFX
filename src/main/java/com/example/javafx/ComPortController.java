@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 public class ComPortController {
 
-    private SerialPort comPort;
+    private static SerialPort comPort;
     private static PrintWriter output;
     private StringBuilder buffer = new StringBuilder();
     public static String portName = "";
@@ -74,7 +74,7 @@ public class ComPortController {
             System.out.println("Sent command: " + command1);
 
             // Отправляем команду для второго сервопривода несколько раз
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 2; i++) {
                 output.println(command1);
                 output.println(command2);
                 output.flush();
@@ -91,12 +91,12 @@ public class ComPortController {
     // Функция посылает сигнал на ардуино включить пищалку
     public static void sendWarningCommand(){
         String command = "WARNING";
-        //System.out.println("Sent command: Warning ");
+        System.out.println("Sent command: Warning ");
         //System.out.println(command);
         output.println(command);
         output.flush();
     }
-    public void closePort() {
+    public static void closePort() {
         if (comPort != null && comPort.isOpen()) {
             comPort.closePort();
         }

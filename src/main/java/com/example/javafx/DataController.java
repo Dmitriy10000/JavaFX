@@ -34,6 +34,12 @@ public class DataController {
 
     public static boolean Warning = false;
 
+    private static MainController mainController;
+
+    public static void setMainController(MainController controller) {
+        mainController = controller;
+    }
+
     public class AlertManager {
         private static boolean alertOpen = false;
 
@@ -81,25 +87,41 @@ public class DataController {
             HeartRate = (int) ((long) HeartRate * DBController.SensorsConfig.heart_rate_coefficient / 1000);
             if ((HeartRate / 100.0f) >= DBController.SensorsConfig.heart_rate_threshold) {
                 Warning = true;
-                String alertMessage = LanguageController.getHeartRateAlertMessage();
+                /*String alertMessage = LanguageController.getHeartRateAlertMessage();
                 String alertTitle = LanguageController.getString("warningTitle"); // Ensure this key is in your properties files
-                AlertManager.showAlert(alertMessage, alertTitle);
-            }else {
+                AlertManager.showAlert(alertMessage, alertTitle);*/
+                if (mainController != null) {
+                    mainController.changeBackgroundColor("rgb(255, 0, 0)"); // Set to red color
+                }
+            } else {
                 Warning = false;
+                if (mainController != null) {
+                    mainController.changeBackgroundColor("rgb(243, 238, 234)"); // Set to normal color
+                }
             }
         }
-        if (line.startsWith("SpO2: ") && line.contains(" %")){
+        if (line.startsWith("SpO2: ") && line.contains(" %")) {
             String Spo2String = line.substring("SpO2: ".length(), line.indexOf(" %"));
             SpO2 = (int) (Float.parseFloat(Spo2String) * 100);
             SpO2 = (int) ((long) SpO2 * DBController.SensorsConfig.spo2_coefficient / 1000);
-            if ((SpO2 / 100.0f) <= DBController.SensorsConfig.spo2_threshold) {
-                Warning = true;
-
-                String alertMessage = LanguageController.getSpO2AlertMessage();
-                String alertTitle = LanguageController.getString("warningTitle");
-                AlertManager.showAlert(alertMessage, alertTitle);
-            }else {
+            if ((SpO2 / 100) == 0) {
                 Warning = false;
+                if (mainController != null) {
+                    mainController.changeBackgroundColor("rgb(243, 238, 234)"); // Set to normal color
+                }
+            } else if ((SpO2 / 100.0f) <= DBController.SensorsConfig.spo2_threshold) {
+                Warning = true;
+                /*String alertMessage = LanguageController.getSpO2AlertMessage();
+                String alertTitle = LanguageController.getString("warningTitle");
+                AlertManager.showAlert(alertMessage, alertTitle);*/
+                if (mainController != null) {
+                    mainController.changeBackgroundColor("rgb(255, 0, 0)"); // Set to red color
+                }
+            } else {
+                Warning = false;
+                if (mainController != null) {
+                    mainController.changeBackgroundColor("rgb(243, 238, 234)"); // Set to normal color
+                }
             }
         }
         if (line.startsWith("Pressure: ") && line.contains(" Pa")) {
@@ -117,10 +139,17 @@ public class DataController {
             Temperature = (int) (Float.parseFloat(TemperatureString) * 100);
             Temperature = (int) ((long) Temperature * DBController.SensorsConfig.temperature_coefficient / 1000);
         }
-        if(Warning == true){
+        if (Warning == true) {
             ComPortController.sendWarningCommand();
-            //System.out.println("Сердцебиение: " +HeartRate);
-            ComPortController.sendServoCommands(0,0);
+            // System.out.println("Сердцебиение: " + HeartRate);
+            ComPortController.sendServoCommands(0, 0);
+            if (mainController != null) {
+                mainController.changeBackgroundColor("rgb(255, 0, 0)"); // Set to red color
+            }
+        } else {
+            if (mainController != null) {
+                mainController.changeBackgroundColor("rgb(243, 238, 234)"); // Set to normal color
+            }
         }
     }
 

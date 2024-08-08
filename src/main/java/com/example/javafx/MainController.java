@@ -6,11 +6,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.VBox;
+
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainController {
 //    @FXML
@@ -97,6 +101,9 @@ public class MainController {
     @FXML
     private LineChart<String, Number> lineChart;
 
+    @FXML
+    private VBox mainVBox;
+
     private XYChart.Series<String, Number> series; // Серия для данных в реальном времени
     private final String lineChartDataType = "heart rate";
 
@@ -128,6 +135,7 @@ public class MainController {
             /*DBController.loadSensorsConfig(DBController.getUserId(DBController.searchUser("").getFirst()));*/
             goToEngineerMenuBtn.setVisible(true);
         }
+        DataController.setMainController(this);
         servo1Slider.setMin(DBController.SensorsConfig.valve1_min);
         servo1Slider.setMax(DBController.SensorsConfig.valve1_max);
         servo1Slider.setValue((DBController.SensorsConfig.valve1_min + DBController.SensorsConfig.valve1_max) / 2);
@@ -168,6 +176,7 @@ public class MainController {
 
         // При выборе COM порта начинаем слушать его и отображать данные на графике за последние 10 секунд по сердцебиению
         ComPortChoiceBox.setOnAction(actionEvent -> {
+            ComPortController.closePort();
             ComPortController.portName = ComPortChoiceBox.getValue();
             ComPortController comPortController = new ComPortController();
             comPortController.initializeSerialPort();
@@ -303,6 +312,11 @@ public class MainController {
             i++;
         }
         return stringPorts;
+    }
+    public void changeBackgroundColor(String color) {
+        Platform.runLater(() -> {
+            mainVBox.setStyle("-fx-background-color: " + color + ";");
+        });
     }
 
     private void updateLanguage() {
