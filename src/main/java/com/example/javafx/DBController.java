@@ -1,7 +1,11 @@
 package com.example.javafx;
 
 import javafx.scene.chart.XYChart;
+import org.springframework.javapoet.JavaFile;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,16 +14,37 @@ import java.util.Objects;
 
 
 public class DBController {
-    private static final String DB_PATH = "jdbc:sqlite::resource:database.sqlite";
+    public static void createDatabaseInAppData() throws IOException {
+        File appData = new File(System.getenv("APPDATA") + "\\HealthMonitor");
+        System.out.println(appData);
+        if (!appData.exists()) {
+            appData.mkdir();
+        }
+        File database = new File(appData + "\\database.sqlite");
+        if (!database.exists()) {
+            InputStream in = DBController.class.getResourceAsStream("/database.sqlite");
+            if (in != null) {
+                byte[] buffer = new byte[in.available()];
+                in.read(buffer);
+                File db = new File(appData + "\\database.sqlite");
+                db.createNewFile();
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(db);
+                fos.write(buffer);
+                fos.close();
+            }
+        }
+    }
+    private static final String DB_PATH = "jdbc:sqlite:" + System.getenv("APPDATA") + "\\HealthMonitor\\database.sqlite";
     private static int userId = 0;
 
     // Инициализация
     static {
         try {
+            createDatabaseInAppData();
             Class.forName("org.sqlite.JDBC");
             System.out.println("Драйвер JDBC SQLite загружен.");
             createDatabase();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e ) {
             System.err.println("Ошибка загрузки драйвера JDBC SQLite: " + e.getMessage());
         }
     }
