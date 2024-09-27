@@ -238,6 +238,9 @@ public class MainController {
                 e.printStackTrace();
             }
         });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            ComPortController.closePort();
+        }));
     }
 
     Timer timer = new Timer();
@@ -305,11 +308,9 @@ public class MainController {
         SerialPort[] ports = SerialPort.getCommPorts();
         String[] stringPorts = new String[ports.length];
         System.out.println("Available COM ports:");
-        int i =0;
-        for (SerialPort port : ports) {
-            System.out.println(port.getSystemPortName() + " - " + port.getDescriptivePortName());
-            stringPorts[i] = port.getSystemPortName();
-            i++;
+        for (int i = 0; i < ports.length; i++) {
+            stringPorts[i] = ports[i].getSystemPortName();
+            System.out.println(stringPorts[i]);
         }
         return stringPorts;
     }
