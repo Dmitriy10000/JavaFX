@@ -1,4 +1,4 @@
-out/artifacts/JavaFX_jar/jre
+out/artifacts
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
