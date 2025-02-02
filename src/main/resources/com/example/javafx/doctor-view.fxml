@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.DoctorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.DoctorController">
    <top>
       <HBox alignment="TOP_RIGHT" minHeight="0.0" minWidth="0.0" spacing="5.0" style="-fx-background-color: rgb(119, 107, 93);" BorderPane.alignment="CENTER">
          <children>
@@ -27,7 +32,7 @@
       </HBox>
    </top>
    <center>
-      <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" minHeight="0.0" minWidth="0.0" spacing="20.0" style="-fx-background-color: rgb(243, 238, 234);" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0">
                <children>
