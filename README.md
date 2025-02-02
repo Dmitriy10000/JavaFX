@@ -20,23 +20,12 @@ This JavaFX-based application is designed to manage an oxygen mask, record senso
 ## Requirements
 
 - **Java Development Kit (JDK):** [Download](https://www.oracle.com/java/technologies/downloads/)
-- **Maven** for dependency management
-- **SQLite** (included in the application)
 
 ## Installation
-
-1. Clone the repository:
+1. Download the latest release: [Releases](https://github.com/Dmitriy10000/OxygenMaskControl/releases)
+2. Run the application:
    ```sh
-   git clone https://github.com/Dmitriy10000/JavaFX.git
-   cd JavaFX
-   ```
-2. Build the project using Maven:
-   ```sh
-   mvn clean install
-   ```
-3. Run the application:
-   ```sh
-   java -jar target/JavaFX.jar
+   java -jar JavaFX.jar
    ```
 
 ## Configuration
